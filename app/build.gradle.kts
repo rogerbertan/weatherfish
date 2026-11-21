@@ -81,6 +81,9 @@ dependencies {
     ksp(libs.hilt.compiler)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.androidx.datastore)
+    implementation(libs.play.services.location)
     implementation(libs.aeris.core) {
         isTransitive = false
     }

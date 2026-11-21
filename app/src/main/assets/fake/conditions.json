@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "error": null,
+  "response": [
+    {
+      "loc": { "lat": -23.5475, "long": -46.63611 },
+      "place": { "name": "são paulo", "state": "sp", "country": "br" },
+      "periods": [
+        {
+          "timestamp": 1795284000,
+          "dateTimeISO": "2026-11-21T15:00:00-03:00",
+          "tempC": 27.4,
+          "feelslikeC": 29.1,
+          "humidity": 62,
+          "dewpointC": 19.6,
+          "windSpeedKPH": 14.8,
+          "windDir": "SE",
+          "pressureMB": 1013.2,
+          "visibilityKM": 10.0,
+          "uvi": 8,
+          "weather": "Parcialmente nublado",
+          "weatherPrimaryCoded": "::SC"
+        }
+      ]
+    }
+  ]
+}

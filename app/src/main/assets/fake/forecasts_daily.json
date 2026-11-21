@@ -1,0 +1,19 @@
+{
+  "success": true,
+  "error": null,
+  "response": [
+    {
+      "loc": { "lat": -23.5475, "long": -46.63611 },
+      "interval": "day",
+      "periods": [
+        { "timestamp": 1795255200, "dateTimeISO": "2026-11-21T07:00:00-03:00", "maxTempC": 29, "minTempC": 19, "pop": 20, "weather": "Parcialmente nublado", "weatherPrimaryCoded": "::SC" },
+        { "timestamp": 1795341600, "dateTimeISO": "2026-11-22T07:00:00-03:00", "maxTempC": 26, "minTempC": 18, "pop": 70, "weather": "Pancadas de chuva", "weatherPrimaryCoded": ":L:RW" },
+        { "timestamp": 1795428000, "dateTimeISO": "2026-11-23T07:00:00-03:00", "maxTempC": 24, "minTempC": 17, "pop": 85, "weather": "Tempestades", "weatherPrimaryCoded": "::T" },
+        { "timestamp": 1795514400, "dateTimeISO": "2026-11-24T07:00:00-03:00", "maxTempC": 22, "minTempC": 16, "pop": 40, "weather": "Nublado", "weatherPrimaryCoded": "::OV" },
+        { "timestamp": 1795600800, "dateTimeISO": "2026-11-25T07:00:00-03:00", "maxTempC": 25, "minTempC": 15, "pop": 10, "weather": "Névoa pela manhã", "weatherPrimaryCoded": "::BR" },
+        { "timestamp": 1795687200, "dateTimeISO": "2026-11-26T07:00:00-03:00", "maxTempC": 28, "minTempC": 17, "pop": 5, "weather": "Ensolarado", "weatherPrimaryCoded": "::CL" },
+        { "timestamp": 1795773600, "dateTimeISO": "2026-11-27T07:00:00-03:00", "maxTempC": 30, "minTempC": 19, "pop": 15, "weather": "Predominantemente ensolarado", "weatherPrimaryCoded": "::FW" }
+      ]
+    }
+  ]
+}

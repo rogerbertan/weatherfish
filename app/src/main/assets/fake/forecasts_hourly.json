@@ -1,0 +1,36 @@
+{
+  "success": true,
+  "error": null,
+  "response": [
+    {
+      "loc": { "lat": -23.5475, "long": -46.63611 },
+      "interval": "1hr",
+      "periods": [
+        { "timestamp": 1795284000, "dateTimeISO": "2026-11-21T15:00:00-03:00", "tempC": 27, "pop": 10, "weather": "Parcialmente nublado", "weatherPrimaryCoded": "::SC" },
+        { "timestamp": 1795287600, "dateTimeISO": "2026-11-21T16:00:00-03:00", "tempC": 27, "pop": 15, "weather": "Parcialmente nublado", "weatherPrimaryCoded": "::SC" },
+        { "timestamp": 1795291200, "dateTimeISO": "2026-11-21T17:00:00-03:00", "tempC": 26, "pop": 20, "weather": "Predominantemente nublado", "weatherPrimaryCoded": "::BK" },
+        { "timestamp": 1795294800, "dateTimeISO": "2026-11-21T18:00:00-03:00", "tempC": 25, "pop": 35, "weather": "Predominantemente nublado", "weatherPrimaryCoded": "::BK" },
+        { "timestamp": 1795298400, "dateTimeISO": "2026-11-21T19:00:00-03:00", "tempC": 24, "pop": 55, "weather": "Garoa", "weatherPrimaryCoded": ":L:L" },
+        { "timestamp": 1795302000, "dateTimeISO": "2026-11-21T20:00:00-03:00", "tempC": 23, "pop": 60, "weather": "Garoa", "weatherPrimaryCoded": ":L:L" },
+        { "timestamp": 1795305600, "dateTimeISO": "2026-11-21T21:00:00-03:00", "tempC": 22, "pop": 45, "weather": "Nublado", "weatherPrimaryCoded": "::OV" },
+        { "timestamp": 1795309200, "dateTimeISO": "2026-11-21T22:00:00-03:00", "tempC": 22, "pop": 30, "weather": "Nublado", "weatherPrimaryCoded": "::OV" },
+        { "timestamp": 1795312800, "dateTimeISO": "2026-11-21T23:00:00-03:00", "tempC": 21, "pop": 25, "weather": "Nublado", "weatherPrimaryCoded": "::OV" },
+        { "timestamp": 1795316400, "dateTimeISO": "2026-11-22T00:00:00-03:00", "tempC": 21, "pop": 20, "weather": "Predominantemente nublado", "weatherPrimaryCoded": "::BK" },
+        { "timestamp": 1795320000, "dateTimeISO": "2026-11-22T01:00:00-03:00", "tempC": 20, "pop": 20, "weather": "Predominantemente nublado", "weatherPrimaryCoded": "::BK" },
+        { "timestamp": 1795323600, "dateTimeISO": "2026-11-22T02:00:00-03:00", "tempC": 20, "pop": 25, "weather": "Predominantemente nublado", "weatherPrimaryCoded": "::BK" },
+        { "timestamp": 1795327200, "dateTimeISO": "2026-11-22T03:00:00-03:00", "tempC": 19, "pop": 30, "weather": "Névoa", "weatherPrimaryCoded": "::BR" },
+        { "timestamp": 1795330800, "dateTimeISO": "2026-11-22T04:00:00-03:00", "tempC": 19, "pop": 30, "weather": "Névoa", "weatherPrimaryCoded": "::BR" },
+        { "timestamp": 1795334400, "dateTimeISO": "2026-11-22T05:00:00-03:00", "tempC": 18, "pop": 35, "weather": "Névoa", "weatherPrimaryCoded": "::BR" },
+        { "timestamp": 1795338000, "dateTimeISO": "2026-11-22T06:00:00-03:00", "tempC": 18, "pop": 40, "weather": "Nublado", "weatherPrimaryCoded": "::OV" },
+        { "timestamp": 1795341600, "dateTimeISO": "2026-11-22T07:00:00-03:00", "tempC": 19, "pop": 50, "weather": "Nublado", "weatherPrimaryCoded": "::OV" },
+        { "timestamp": 1795345200, "dateTimeISO": "2026-11-22T08:00:00-03:00", "tempC": 20, "pop": 60, "weather": "Pancadas de chuva", "weatherPrimaryCoded": ":L:RW" },
+        { "timestamp": 1795348800, "dateTimeISO": "2026-11-22T09:00:00-03:00", "tempC": 21, "pop": 70, "weather": "Pancadas de chuva", "weatherPrimaryCoded": ":L:RW" },
+        { "timestamp": 1795352400, "dateTimeISO": "2026-11-22T10:00:00-03:00", "tempC": 22, "pop": 75, "weather": "Chuva", "weatherPrimaryCoded": "::R" },
+        { "timestamp": 1795356000, "dateTimeISO": "2026-11-22T11:00:00-03:00", "tempC": 23, "pop": 80, "weather": "Chuva", "weatherPrimaryCoded": "::R" },
+        { "timestamp": 1795359600, "dateTimeISO": "2026-11-22T12:00:00-03:00", "tempC": 24, "pop": 70, "weather": "Tempestade", "weatherPrimaryCoded": "::T" },
+        { "timestamp": 1795363200, "dateTimeISO": "2026-11-22T13:00:00-03:00", "tempC": 25, "pop": 65, "weather": "Tempestade", "weatherPrimaryCoded": "::T" },
+        { "timestamp": 1795366800, "dateTimeISO": "2026-11-22T14:00:00-03:00", "tempC": 25, "pop": 50, "weather": "Pancadas de chuva", "weatherPrimaryCoded": ":L:RW" }
+      ]
+    }
+  ]
+}

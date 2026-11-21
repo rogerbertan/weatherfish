@@ -1,0 +1,16 @@
+{
+  "success": true,
+  "error": null,
+  "response": [
+    { "loc": { "lat": -23.5475, "long": -46.63611 }, "place": { "name": "são paulo", "state": "sp", "stateFull": "São Paulo", "country": "br", "countryFull": "Brasil" }, "profile": { "tz": "America/Sao_Paulo" } },
+    { "loc": { "lat": -22.90642, "long": -43.18223 }, "place": { "name": "rio de janeiro", "state": "rj", "stateFull": "Rio de Janeiro", "country": "br", "countryFull": "Brasil" }, "profile": { "tz": "America/Sao_Paulo" } },
+    { "loc": { "lat": -30.03283, "long": -51.23019 }, "place": { "name": "porto alegre", "state": "rs", "stateFull": "Rio Grande do Sul", "country": "br", "countryFull": "Brasil" }, "profile": { "tz": "America/Sao_Paulo" } },
+    { "loc": { "lat": -27.59667, "long": -48.54917 }, "place": { "name": "florianópolis", "state": "sc", "stateFull": "Santa Catarina", "country": "br", "countryFull": "Brasil" }, "profile": { "tz": "America/Sao_Paulo" } },
+    { "loc": { "lat": -25.42778, "long": -49.27306 }, "place": { "name": "curitiba", "state": "pr", "stateFull": "Paraná", "country": "br", "countryFull": "Brasil" }, "profile": { "tz": "America/Sao_Paulo" } },
+    { "loc": { "lat": -3.71722, "long": -38.54306 }, "place": { "name": "fortaleza", "state": "ce", "stateFull": "Ceará", "country": "br", "countryFull": "Brasil" }, "profile": { "tz": "America/Fortaleza" } },
+    { "loc": { "lat": -3.10194, "long": -60.025 }, "place": { "name": "manaus", "state": "am", "stateFull": "Amazonas", "country": "br", "countryFull": "Brasil" }, "profile": { "tz": "America/Manaus" } },
+    { "loc": { "lat": 38.71667, "long": -9.13333 }, "place": { "name": "lisboa", "state": "", "stateFull": "", "country": "pt", "countryFull": "Portugal" }, "profile": { "tz": "Europe/Lisbon" } },
+    { "loc": { "lat": 41.14961, "long": -8.61099 }, "place": { "name": "porto", "state": "", "stateFull": "", "country": "pt", "countryFull": "Portugal" }, "profile": { "tz": "Europe/Lisbon" } },
+    { "loc": { "lat": -34.61315, "long": -58.37723 }, "place": { "name": "buenos aires", "state": "", "stateFull": "", "country": "ar", "countryFull": "Argentina" }, "profile": { "tz": "America/Argentina/Buenos_Aires" } }
+  ]
+}

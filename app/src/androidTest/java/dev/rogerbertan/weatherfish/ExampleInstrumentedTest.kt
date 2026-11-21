@@ -1,24 +1,20 @@
 package dev.rogerbertan.weatherfish
 
 import androidx.test.platform.app.InstrumentationRegistry
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
 
-import org.junit.Test
-import org.junit.runner.RunWith
-
-import org.junit.Assert.*
-
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-@RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
+
     @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("dev.rogerbertan.weatherfish", appContext.packageName)
+    fun `should run with the app package as target context`() {
+        // Arrange
+        val instrumentation = InstrumentationRegistry.getInstrumentation()
+
+        // Act
+        val packageName = instrumentation.targetContext.packageName
+
+        // Assert
+        assertEquals("dev.rogerbertan.weatherfish", packageName)
     }
 }

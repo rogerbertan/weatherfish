@@ -7,6 +7,8 @@ import dev.rogerbertan.weatherfish.domain.HourlyForecast
 import dev.rogerbertan.weatherfish.domain.Place
 import dev.rogerbertan.weatherfish.domain.WeatherCondition
 import dev.rogerbertan.weatherfish.domain.WeatherError
+import java.text.Normalizer
+import java.time.DateTimeException
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
@@ -15,13 +17,30 @@ import kotlinx.serialization.json.Json
 val xweatherJson = Json { ignoreUnknownKeys = true }
 
 fun <T> XweatherResponse<T>.orThrow(): List<T> =
-    if (success) response else throw error?.toDomain() ?: WeatherError.Unknown("unexpected response")
+    if (success) response else throw weatherErrorFor(error?.code)
 
-private fun XweatherError.toDomain(): WeatherError = when (code) {
-    "invalid_client", "unauthorized_namespace", "maxhits_daily" -> WeatherError.Unauthorized
-    "invalid_location", "invalid_query", "no_data" -> WeatherError.NotFound
-    else -> WeatherError.Unknown(description.ifBlank { code })
+fun weatherErrorFor(code: String?): WeatherError = when {
+    code == null -> WeatherError.Unknown("unexpected response")
+    code == "IOException" -> WeatherError.Network
+    code == "invalid_client" || code == "unauthorized_namespace" -> WeatherError.Unauthorized
+    code.startsWith("maxhits") -> WeatherError.QuotaExceeded
+    code == "invalid_location" || code == "invalid_query" || code == "no_data" -> WeatherError.NotFound
+    else -> WeatherError.Unknown(code)
 }
+
+inline fun <T> parsingOrThrow(block: () -> T): T =
+    try {
+        block()
+    } catch (e: IllegalArgumentException) {
+        throw WeatherError.Unknown(e.message ?: "invalid response")
+    } catch (e: DateTimeException) {
+        throw WeatherError.Unknown(e.message ?: "invalid date")
+    } catch (e: NullPointerException) {
+        throw WeatherError.Unknown(e.message ?: "missing field")
+    }
+
+fun String.foldForSearch(): String =
+    Normalizer.normalize(trim().lowercase(), Normalizer.Form.NFD).replace(Regex("\\p{M}"), "")
 
 fun PlaceResponse.toDomain() = Place(
     name = titleCasePlaceName(place.name),

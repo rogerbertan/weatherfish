@@ -2,6 +2,7 @@ package dev.rogerbertan.weatherfish.data.fake
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dev.rogerbertan.weatherfish.data.xweather.parsingOrThrow
 import dev.rogerbertan.weatherfish.domain.CurrentWeather
 import dev.rogerbertan.weatherfish.domain.DailyForecast
 import dev.rogerbertan.weatherfish.domain.GeoPoint
@@ -9,7 +10,6 @@ import dev.rogerbertan.weatherfish.domain.HourlyForecast
 import dev.rogerbertan.weatherfish.domain.Place
 import dev.rogerbertan.weatherfish.domain.WeatherError
 import dev.rogerbertan.weatherfish.domain.WeatherRepository
-import java.time.DateTimeException
 import javax.inject.Inject
 import kotlin.time.Duration
 import kotlinx.coroutines.Dispatchers
@@ -41,12 +41,6 @@ class FakeWeatherRepository @Inject constructor(
         val json = withContext(Dispatchers.IO) {
             context.assets.open(endpoint.file).bufferedReader().use { it.readText() }
         }
-        return try {
-            parse(json)
-        } catch (e: IllegalArgumentException) {
-            throw WeatherError.Unknown(e.message ?: endpoint.file)
-        } catch (e: DateTimeException) {
-            throw WeatherError.Unknown(e.message ?: endpoint.file)
-        }
+        return parsingOrThrow { parse(json) }
     }
 }

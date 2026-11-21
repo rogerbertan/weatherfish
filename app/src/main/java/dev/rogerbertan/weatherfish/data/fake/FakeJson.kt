@@ -4,6 +4,7 @@ import dev.rogerbertan.weatherfish.data.xweather.ConditionsResponse
 import dev.rogerbertan.weatherfish.data.xweather.ForecastResponse
 import dev.rogerbertan.weatherfish.data.xweather.PlaceResponse
 import dev.rogerbertan.weatherfish.data.xweather.XweatherResponse
+import dev.rogerbertan.weatherfish.data.xweather.foldForSearch
 import dev.rogerbertan.weatherfish.data.xweather.orThrow
 import dev.rogerbertan.weatherfish.data.xweather.toDaily
 import dev.rogerbertan.weatherfish.data.xweather.toDomain
@@ -14,7 +15,6 @@ import dev.rogerbertan.weatherfish.domain.DailyForecast
 import dev.rogerbertan.weatherfish.domain.HourlyForecast
 import dev.rogerbertan.weatherfish.domain.Place
 import dev.rogerbertan.weatherfish.domain.WeatherError
-import java.text.Normalizer
 
 enum class FakeEndpoint(val file: String) {
     Conditions("fake/conditions.json"),
@@ -42,6 +42,3 @@ fun parsePlaces(json: String, query: String): List<Place> {
         .map { it.toDomain() }
         .filter { it.name.foldForSearch().contains(needle) }
 }
-
-private fun String.foldForSearch(): String =
-    Normalizer.normalize(trim().lowercase(), Normalizer.Form.NFD).replace(Regex("\\p{M}"), "")

@@ -10,6 +10,8 @@ import java.time.ZoneId
 
 val testPlace = Place("Porto Alegre", "Rio Grande do Sul", "Brasil", GeoPoint(-30.0, -51.2), ZoneId.of("America/Sao_Paulo"))
 
+val otherPlace = Place("Curitiba", "Paraná", "Brasil", GeoPoint(-25.4, -49.3), ZoneId.of("America/Sao_Paulo"))
+
 val testCurrent = CurrentWeather(
     observedAt = Instant.EPOCH,
     condition = WeatherCondition.Clear,

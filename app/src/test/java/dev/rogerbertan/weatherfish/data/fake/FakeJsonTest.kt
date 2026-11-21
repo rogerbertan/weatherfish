@@ -64,6 +64,18 @@ class FakeJsonTest {
     }
 
     @Test
+    fun `should parse closest place asset`() {
+        // Arrange
+        val json = asset(FakeEndpoint.PlacesClosest)
+
+        // Act
+        val place = parseClosestPlace(json)
+
+        // Assert
+        assertEquals("Porto Alegre", place.name)
+    }
+
+    @Test
     fun `should throw domain error when xweather responds with error`() {
         // Arrange
         val json = """{"success":false,"error":{"code":"invalid_location","description":"x"},"response":[]}"""

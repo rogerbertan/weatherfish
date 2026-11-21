@@ -29,6 +29,7 @@
     <string name="today_feels_like">Sensação de %1$s</string>
     <string name="today_next_24h">Próximas 24h</string>
     <string name="today_see_details">Ver detalhes</string>
+    <string name="today_locating">Buscando sua localização</string>
 
     <string name="details_title">Detalhes</string>
     <string name="details_feels_like">Sensação térmica</string>
@@ -44,6 +45,15 @@
     <string name="search_placeholder">Buscar cidade</string>
     <string name="search_hint">Digite o nome de uma cidade</string>
     <string name="search_empty">Nenhuma cidade encontrada</string>
+
+    <string name="favorite_add">Favoritar</string>
+    <string name="favorite_remove">Remover das favoritas</string>
+    <string name="favorites_title">Favoritas</string>
+    <string name="favorites_current_location">Minha localização</string>
+    <string name="favorites_empty">Nenhuma cidade favorita ainda. Use a estrela na busca ou na tela Hoje.</string>
+    <string name="favorites_unit">Unidade de temperatura</string>
+    <string name="unit_celsius">°C</string>
+    <string name="unit_fahrenheit">°F</string>
 
     <string name="map_placeholder">O mapa ainda não está disponível</string>
     <string name="share_placeholder">O compartilhamento ainda não está disponível</string>

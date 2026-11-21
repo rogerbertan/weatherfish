@@ -21,6 +21,7 @@ enum class FakeEndpoint(val file: String) {
     HourlyForecast("fake/forecasts_hourly.json"),
     DailyForecast("fake/forecasts_daily.json"),
     PlacesSearch("fake/places_search.json"),
+    PlacesClosest("fake/places_closest.json"),
 }
 
 fun parseConditions(json: String): CurrentWeather =
@@ -35,6 +36,11 @@ fun parseHourly(json: String, hours: Int): List<HourlyForecast> =
 fun parseDaily(json: String, days: Int): List<DailyForecast> =
     xweatherJson.decodeFromString<XweatherResponse<ForecastResponse>>(json).orThrow()
         .flatMap { it.periods }.take(days).map { it.toDaily() }
+
+fun parseClosestPlace(json: String): Place =
+    xweatherJson.decodeFromString<XweatherResponse<PlaceResponse>>(json).orThrow()
+        .firstOrNull()?.toDomain()
+        ?: throw WeatherError.NotFound
 
 fun parsePlaces(json: String, query: String): List<Place> {
     val needle = query.foldForSearch()

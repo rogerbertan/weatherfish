@@ -5,4 +5,5 @@ interface WeatherRepository {
     suspend fun hourlyForecast(point: GeoPoint, hours: Int): List<HourlyForecast>
     suspend fun dailyForecast(point: GeoPoint, days: Int): List<DailyForecast>
     suspend fun searchPlaces(query: String): List<Place>
+    suspend fun placeAt(point: GeoPoint): Place
 }

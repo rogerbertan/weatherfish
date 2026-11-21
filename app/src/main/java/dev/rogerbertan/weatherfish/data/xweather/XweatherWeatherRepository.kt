@@ -45,6 +45,11 @@ class XweatherWeatherRepository @Inject constructor(
         return fetch(AerisRequest(Endpoint(EndpointType.PLACES), Action.SEARCH, *params), ::parseAerisPlaces)
     }
 
+    override suspend fun placeAt(point: GeoPoint): Place =
+        fetch(AerisRequest(Endpoint(EndpointType.PLACES), point.id)) {
+            parseAerisPlaces(it).firstOrNull() ?: throw WeatherError.NotFound
+        }
+
     private val GeoPoint.id get() = String.format(Locale.ROOT, "%.5f,%.5f", latitude, longitude)
 
     private fun forecasts(point: GeoPoint, filter: String, limit: Int) = AerisRequest(

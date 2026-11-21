@@ -35,6 +35,9 @@ class FakeWeatherRepository @Inject constructor(
     override suspend fun searchPlaces(query: String): List<Place> =
         load(FakeEndpoint.PlacesSearch) { parsePlaces(it, query) }
 
+    override suspend fun placeAt(point: GeoPoint): Place =
+        load(FakeEndpoint.PlacesClosest, ::parseClosestPlace)
+
     private suspend fun <T> load(endpoint: FakeEndpoint, parse: (String) -> T): T {
         delay(config.latency)
         config.simulatedError?.let { throw it }

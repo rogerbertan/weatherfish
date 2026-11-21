@@ -7,11 +7,17 @@ import org.junit.jupiter.api.Test
 
 class ArchitectureTest {
 
-    private fun filesInLayer(layer: String) = Konsist.scopeFromProduction().files.filter { file ->
+    private val productionFiles = Konsist.scopeFromProduction().files
+
+    private fun KoFileDeclaration.isInLayer(layer: String): Boolean {
         val root = "dev.rogerbertan.weatherfish.$layer"
-        val pkg = file.packagee?.name.orEmpty()
-        pkg == root || pkg.startsWith("$root.")
+        val pkg = packagee?.name.orEmpty()
+        return pkg == root || pkg.startsWith("$root.")
     }
+
+    private fun filesInLayer(layer: String) = productionFiles.filter { it.isInLayer(layer) }
+
+    private fun filesOutsideLayer(layer: String) = productionFiles.filterNot { it.isInLayer(layer) }
 
     private fun List<KoFileDeclaration>.importing(vararg prefixes: String) =
         filter { file -> file.imports.any { import -> prefixes.any(import.name::startsWith) } }.map { it.path }
@@ -22,7 +28,7 @@ class ArchitectureTest {
         val files = filesInLayer("domain") + filesInLayer("ui")
 
         // Act
-        val offenders = files.importing("dev.rogerbertan.weatherfish.data", "com.xweather", "com.mapbox")
+        val offenders = files.importing("dev.rogerbertan.weatherfish.data", "com.google.gson", "com.mapbox")
 
         // Assert
         assertEquals(emptyList<String>(), offenders)
@@ -35,6 +41,30 @@ class ArchitectureTest {
 
         // Act
         val offenders = files.importing("android")
+
+        // Assert
+        assertEquals(emptyList<String>(), offenders)
+    }
+
+    @Test
+    fun `should import aeris sdk only in data xweather`() {
+        // Arrange
+        val files = filesOutsideLayer("data.xweather")
+
+        // Act
+        val offenders = files.importing("com.aerisweather")
+
+        // Assert
+        assertEquals(emptyList<String>(), offenders)
+    }
+
+    @Test
+    fun `should read xweather keys only in data xweather`() {
+        // Arrange
+        val files = filesOutsideLayer("data.xweather")
+
+        // Act
+        val offenders = files.filter { it.text.contains("XWEATHER_CLIENT") }.map { it.path }
 
         // Assert
         assertEquals(emptyList<String>(), offenders)

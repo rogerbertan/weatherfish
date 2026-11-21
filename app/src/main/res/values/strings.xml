@@ -1,3 +1,49 @@
 <resources>
     <string name="app_name">WeatherFish</string>
+
+    <string name="nav_today">Hoje</string>
+    <string name="nav_week">Semana</string>
+    <string name="nav_search">Busca</string>
+    <string name="nav_map">Mapa</string>
+    <string name="nav_share">Compartilhar</string>
+
+    <string name="retry">Tentar de novo</string>
+    <string name="back">Voltar</string>
+    <string name="error_network">Sem conexão. Confira sua internet.</string>
+    <string name="error_unauthorized">Não foi possível acessar o serviço de previsão.</string>
+    <string name="error_not_found">Não encontramos dados para esta localidade.</string>
+    <string name="error_unknown">Algo deu errado ao carregar a previsão.</string>
+
+    <string name="condition_clear">Céu limpo</string>
+    <string name="condition_partly_cloudy">Parcialmente nublado</string>
+    <string name="condition_cloudy">Nublado</string>
+    <string name="condition_fog">Neblina</string>
+    <string name="condition_drizzle">Garoa</string>
+    <string name="condition_rain">Chuva</string>
+    <string name="condition_thunderstorm">Tempestade</string>
+    <string name="condition_snow">Neve</string>
+    <string name="condition_wind">Vento</string>
+    <string name="condition_unknown">Condição desconhecida</string>
+
+    <string name="today_feels_like">Sensação de %1$s</string>
+    <string name="today_next_24h">Próximas 24h</string>
+    <string name="today_see_details">Ver detalhes</string>
+
+    <string name="details_title">Detalhes</string>
+    <string name="details_feels_like">Sensação térmica</string>
+    <string name="details_humidity">Umidade</string>
+    <string name="details_dew_point">Ponto de orvalho</string>
+    <string name="details_wind">Vento</string>
+    <string name="details_pressure">Pressão</string>
+    <string name="details_visibility">Visibilidade</string>
+    <string name="details_uv">Índice UV</string>
+
+    <string name="week_title">Próximos 7 dias</string>
+
+    <string name="search_placeholder">Buscar cidade</string>
+    <string name="search_hint">Digite o nome de uma cidade</string>
+    <string name="search_empty">Nenhuma cidade encontrada</string>
+
+    <string name="map_placeholder">O mapa ainda não está disponível</string>
+    <string name="share_placeholder">O compartilhamento ainda não está disponível</string>
 </resources>

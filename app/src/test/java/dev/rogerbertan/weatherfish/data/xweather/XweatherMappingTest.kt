@@ -44,4 +44,24 @@ class XweatherMappingTest {
         // Assert
         assertEquals(expected, result)
     }
+
+    @ParameterizedTest(name = "should map error code \"{0}\" to {1}")
+    @CsvSource(
+        "IOException, Network",
+        "invalid_client, Unauthorized",
+        "unauthorized_namespace, Unauthorized",
+        "maxhits_daily, QuotaExceeded",
+        "maxhits_min, QuotaExceeded",
+        "invalid_location, NotFound",
+        "invalid_query, NotFound",
+        "no_data, NotFound",
+        "UNKNOWN, Unknown",
+    )
+    fun `should map xweather error code to weather error`(code: String, expected: String) {
+        // Act
+        val result = weatherErrorFor(code)
+
+        // Assert
+        assertEquals(expected, result::class.simpleName)
+    }
 }

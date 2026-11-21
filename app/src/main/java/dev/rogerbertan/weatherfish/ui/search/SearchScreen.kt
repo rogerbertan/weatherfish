@@ -1,5 +1,6 @@
 package dev.rogerbertan.weatherfish.ui.search
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,16 +29,26 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.rogerbertan.weatherfish.R
 import dev.rogerbertan.weatherfish.domain.Place
+import dev.rogerbertan.weatherfish.ui.common.FavoriteButton
 import dev.rogerbertan.weatherfish.ui.common.LoadState
 import dev.rogerbertan.weatherfish.ui.common.LoadStateContent
 
 @Composable
-fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchViewModel = hiltViewModel()) {
+fun SearchScreen(
+    onPlaceSelected: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: SearchViewModel = hiltViewModel(),
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     SearchContent(
         query = viewModel.query,
         uiState = uiState,
         onRetry = viewModel::retry,
+        onSelect = { place ->
+            viewModel.select(place)
+            onPlaceSelected()
+        },
+        onToggleFavorite = viewModel::toggleFavorite,
         modifier = modifier,
     )
 }
@@ -45,8 +56,10 @@ fun SearchScreen(modifier: Modifier = Modifier, viewModel: SearchViewModel = hil
 @Composable
 private fun SearchContent(
     query: TextFieldState,
-    uiState: LoadState<List<Place>>,
+    uiState: LoadState<List<SearchResult>>,
     onRetry: () -> Unit,
+    onSelect: (Place) -> Unit,
+    onToggleFavorite: (SearchResult) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -59,24 +72,34 @@ private fun SearchContent(
                 .fillMaxWidth()
                 .padding(16.dp),
         )
-        LoadStateContent(state = uiState, onRetry = onRetry) { places ->
+        LoadStateContent(state = uiState, onRetry = onRetry) { results ->
             when {
                 query.text.isBlank() -> CenteredHint(stringResource(R.string.search_hint))
-                places.isEmpty() -> CenteredHint(stringResource(R.string.search_empty))
-                else -> PlaceList(places = places)
+                results.isEmpty() -> CenteredHint(stringResource(R.string.search_empty))
+                else -> ResultList(results = results, onSelect = onSelect, onToggleFavorite = onToggleFavorite)
             }
         }
     }
 }
 
 @Composable
-private fun PlaceList(places: List<Place>, modifier: Modifier = Modifier) {
+private fun ResultList(
+    results: List<SearchResult>,
+    onSelect: (Place) -> Unit,
+    onToggleFavorite: (SearchResult) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     LazyColumn(modifier = modifier.fillMaxSize()) {
-        items(places, key = { "${it.point.latitude},${it.point.longitude}" }) { place ->
+        items(results, key = { "${it.place.point.latitude},${it.place.point.longitude}" }) { result ->
+            val place = result.place
             ListItem(
                 headlineContent = { Text(place.name) },
                 supportingContent = { Text(listOfNotNull(place.region, place.country).joinToString(", ")) },
                 leadingContent = { Icon(Icons.Outlined.LocationOn, contentDescription = null) },
+                trailingContent = {
+                    FavoriteButton(isFavorite = result.isFavorite, onClick = { onToggleFavorite(result) })
+                },
+                modifier = Modifier.clickable { onSelect(place) },
             )
             HorizontalDivider()
         }

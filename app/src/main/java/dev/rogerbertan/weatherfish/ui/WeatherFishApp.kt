@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -30,6 +31,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import dev.rogerbertan.weatherfish.R
 import dev.rogerbertan.weatherfish.ui.details.DetailsScreen
+import dev.rogerbertan.weatherfish.ui.favorites.FavoritesScreen
 import dev.rogerbertan.weatherfish.ui.map.MapScreen
 import dev.rogerbertan.weatherfish.ui.search.SearchScreen
 import dev.rogerbertan.weatherfish.ui.share.ShareScreen
@@ -41,6 +43,7 @@ import kotlinx.serialization.Serializable
 @Serializable data object TodayGraph
 @Serializable data object TodayRoute
 @Serializable data object DetailsRoute
+@Serializable data object FavoritesRoute
 @Serializable data object WeekRoute
 @Serializable data object SearchRoute
 @Serializable data object MapRoute
@@ -67,13 +70,7 @@ fun WeatherFishApp(modifier: Modifier = Modifier) {
                 TopLevelDestination.entries.forEach { destination ->
                     NavigationBarItem(
                         selected = currentDestination.isIn(destination.route::class),
-                        onClick = {
-                            navController.navigate(destination.route) {
-                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        },
+                        onClick = { navController.navigateToTopLevel(destination.route) },
                         icon = { Icon(destination.icon, contentDescription = null) },
                         label = { Text(stringResource(destination.label)) },
                     )
@@ -88,17 +85,38 @@ fun WeatherFishApp(modifier: Modifier = Modifier) {
         ) {
             navigation<TodayGraph>(startDestination = TodayRoute) {
                 composable<TodayRoute> {
-                    TodayScreen(onOpenDetails = { navController.navigate(DetailsRoute) })
+                    TodayScreen(
+                        onOpenFavorites = { navController.navigate(FavoritesRoute) },
+                        onOpenDetails = { navController.navigate(DetailsRoute) },
+                    )
                 }
                 composable<DetailsRoute> {
                     DetailsScreen(onBack = navController::popBackStack)
                 }
+                composable<FavoritesRoute> {
+                    FavoritesScreen(onBack = navController::popBackStack)
+                }
             }
             composable<WeekRoute> { WeekScreen() }
-            composable<SearchRoute> { SearchScreen() }
+            composable<SearchRoute> {
+                SearchScreen(
+                    onPlaceSelected = {
+                        navController.navigateToTopLevel(TodayGraph)
+                        navController.popBackStack<TodayRoute>(inclusive = false)
+                    },
+                )
+            }
             composable<MapRoute> { MapScreen() }
             composable<ShareRoute> { ShareScreen() }
         }
+    }
+}
+
+private fun NavController.navigateToTopLevel(route: Any) {
+    navigate(route) {
+        popUpTo(graph.findStartDestination().id) { saveState = true }
+        launchSingleTop = true
+        restoreState = true
     }
 }
 

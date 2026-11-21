@@ -1,0 +1,10 @@
+# Copie para local.properties e preencha com as suas chaves.
+# O Android Studio preenche o sdk.dir sozinho.
+sdk.dir=/caminho/para/Android/sdk
+
+# Painel da Xweather > Access Keys, com o namespace dev.rogerbertan.weatherfish
+XWEATHER_CLIENT_ID=your-xweather-client-id
+XWEATHER_CLIENT_SECRET=your-xweather-client-secret
+
+# https://console.mapbox.com/account/access-tokens > Default public token
+MAPBOX_ACCESS_TOKEN=pk.your-mapbox-public-token

@@ -28,7 +28,13 @@ class ArchitectureTest {
         val files = filesInLayer("domain") + filesInLayer("ui")
 
         // Act
-        val offenders = files.importing("dev.rogerbertan.weatherfish.data", "com.google.gson", "com.mapbox")
+        val offenders = files.importing(
+            "dev.rogerbertan.weatherfish.data",
+            "com.google.gson",
+            "com.mapbox",
+            "com.google.android.gms",
+            "androidx.datastore",
+        )
 
         // Assert
         assertEquals(emptyList<String>(), offenders)

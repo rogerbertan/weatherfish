@@ -36,6 +36,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.rogerbertan.weatherfish.R
 import dev.rogerbertan.weatherfish.domain.CurrentWeather
+import dev.rogerbertan.weatherfish.domain.TemperatureUnit
 import dev.rogerbertan.weatherfish.ui.common.LoadStateContent
 import dev.rogerbertan.weatherfish.ui.common.formatTemperature
 import kotlin.math.roundToInt
@@ -50,10 +51,10 @@ private enum class DetailProperty(@StringRes val label: Int, val icon: ImageVect
     Uv(R.string.details_uv, Icons.Outlined.WbSunny),
 }
 
-private fun DetailProperty.format(current: CurrentWeather): String = when (this) {
-    DetailProperty.FeelsLike -> formatTemperature(current.feelsLikeC)
+private fun DetailProperty.format(current: CurrentWeather, unit: TemperatureUnit): String = when (this) {
+    DetailProperty.FeelsLike -> formatTemperature(current.feelsLikeC, unit)
     DetailProperty.Humidity -> "${current.humidityPercent}%"
-    DetailProperty.DewPoint -> formatTemperature(current.dewPointC)
+    DetailProperty.DewPoint -> formatTemperature(current.dewPointC, unit)
     DetailProperty.Wind -> "${current.windSpeedKph.roundToInt()} km/h ${current.windDirection}"
     DetailProperty.Pressure -> "${current.pressureMb.roundToInt()} hPa"
     DetailProperty.Visibility -> "${current.visibilityKm.roundToInt()} km"
@@ -78,14 +79,14 @@ fun DetailsScreen(
             },
             windowInsets = WindowInsets(0),
         )
-        LoadStateContent(state = uiState, onRetry = viewModel::retry) { current ->
-            PropertyGrid(current = current)
+        LoadStateContent(state = uiState, onRetry = viewModel::retry) { details ->
+            PropertyGrid(current = details.current, unit = details.unit)
         }
     }
 }
 
 @Composable
-private fun PropertyGrid(current: CurrentWeather, modifier: Modifier = Modifier) {
+private fun PropertyGrid(current: CurrentWeather, unit: TemperatureUnit, modifier: Modifier = Modifier) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = modifier.fillMaxSize(),
@@ -94,7 +95,7 @@ private fun PropertyGrid(current: CurrentWeather, modifier: Modifier = Modifier)
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(DetailProperty.entries, key = { it.name }) { property ->
-            PropertyCard(property = property, value = property.format(current))
+            PropertyCard(property = property, value = property.format(current, unit))
         }
     }
 }

@@ -22,6 +22,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.rogerbertan.weatherfish.R
 import dev.rogerbertan.weatherfish.domain.DailyForecast
+import dev.rogerbertan.weatherfish.domain.TemperatureUnit
 import dev.rogerbertan.weatherfish.ui.common.ConditionIcon
 import dev.rogerbertan.weatherfish.ui.common.LoadStateContent
 import dev.rogerbertan.weatherfish.ui.common.formatDayMonth
@@ -31,13 +32,13 @@ import dev.rogerbertan.weatherfish.ui.common.formatWeekday
 @Composable
 fun WeekScreen(modifier: Modifier = Modifier, viewModel: WeekViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    LoadStateContent(state = uiState, onRetry = viewModel::retry, modifier = modifier) { days ->
-        DayList(days = days)
+    LoadStateContent(state = uiState, onRetry = viewModel::retry, modifier = modifier) { week ->
+        DayList(days = week.days, unit = week.unit)
     }
 }
 
 @Composable
-private fun DayList(days: List<DailyForecast>, modifier: Modifier = Modifier) {
+private fun DayList(days: List<DailyForecast>, unit: TemperatureUnit, modifier: Modifier = Modifier) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
@@ -51,13 +52,13 @@ private fun DayList(days: List<DailyForecast>, modifier: Modifier = Modifier) {
             )
         }
         items(days, key = { it.date.toEpochDay() }) { day ->
-            DayRow(day = day)
+            DayRow(day = day, unit = unit)
         }
     }
 }
 
 @Composable
-private fun DayRow(day: DailyForecast, modifier: Modifier = Modifier) {
+private fun DayRow(day: DailyForecast, unit: TemperatureUnit, modifier: Modifier = Modifier) {
     Card(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -75,7 +76,7 @@ private fun DayRow(day: DailyForecast, modifier: Modifier = Modifier) {
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(
-                    text = "${formatTemperature(day.maxTemperatureC)} / ${formatTemperature(day.minTemperatureC)}",
+                    text = "${formatTemperature(day.maxTemperatureC, unit)} / ${formatTemperature(day.minTemperatureC, unit)}",
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(

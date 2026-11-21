@@ -1,5 +1,6 @@
 package dev.rogerbertan.weatherfish.ui.common
 
+import dev.rogerbertan.weatherfish.domain.TemperatureUnit
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
@@ -10,7 +11,13 @@ import kotlin.math.roundToInt
 
 private val hourFormatter = DateTimeFormatter.ofPattern("HH'h'")
 
-fun formatTemperature(celsius: Double): String = "${celsius.roundToInt()}°"
+fun formatTemperature(celsius: Double, unit: TemperatureUnit): String {
+    val value = when (unit) {
+        TemperatureUnit.Celsius -> celsius
+        TemperatureUnit.Fahrenheit -> celsius * 9 / 5 + 32
+    }
+    return "${value.roundToInt()}°"
+}
 
 fun formatHour(time: Instant, zone: ZoneId): String = hourFormatter.format(time.atZone(zone))
 

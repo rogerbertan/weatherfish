@@ -8,6 +8,12 @@ sealed interface LoadState<out T> {
     data class Loaded<T>(val value: T) : LoadState<T>
 }
 
+fun <T, R> LoadState<T>.map(transform: (T) -> R): LoadState<R> = when (this) {
+    LoadState.Loading -> LoadState.Loading
+    is LoadState.Failed -> this
+    is LoadState.Loaded -> LoadState.Loaded(transform(value))
+}
+
 suspend fun <T> loadState(block: suspend () -> T): LoadState<T> =
     try {
         LoadState.Loaded(block())

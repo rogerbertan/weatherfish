@@ -64,6 +64,7 @@ private fun ErrorMessage(error: WeatherError, onRetry: () -> Unit, modifier: Mod
 private fun WeatherError.messageRes(): Int = when (this) {
     WeatherError.Network -> R.string.error_network
     WeatherError.Unauthorized -> R.string.error_unauthorized
+    WeatherError.QuotaExceeded -> R.string.error_quota
     WeatherError.NotFound -> R.string.error_not_found
     is WeatherError.Unknown -> R.string.error_unknown
 }

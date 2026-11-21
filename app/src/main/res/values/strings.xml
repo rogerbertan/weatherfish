@@ -11,6 +11,7 @@
     <string name="back">Voltar</string>
     <string name="error_network">Sem conexão. Confira sua internet.</string>
     <string name="error_unauthorized">Não foi possível acessar o serviço de previsão.</string>
+    <string name="error_quota">Limite de consultas atingido. Tente mais tarde.</string>
     <string name="error_not_found">Não encontramos dados para esta localidade.</string>
     <string name="error_unknown">Algo deu errado ao carregar a previsão.</string>
 

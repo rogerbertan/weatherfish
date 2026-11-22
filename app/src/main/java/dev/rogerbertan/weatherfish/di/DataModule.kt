@@ -5,6 +5,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.handlers.ReplaceFileCorruptionHandler
 import androidx.datastore.dataStoreFile
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanner
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -18,11 +22,13 @@ import dev.rogerbertan.weatherfish.data.fake.FakeConfig
 import dev.rogerbertan.weatherfish.data.fake.FakeWeatherRepository
 import dev.rogerbertan.weatherfish.data.location.FusedLocationProvider
 import dev.rogerbertan.weatherfish.data.location.LocationProvider
+import dev.rogerbertan.weatherfish.data.scanner.GmsQrScanner
 import dev.rogerbertan.weatherfish.data.settings.DataStoreUserPreferences
 import dev.rogerbertan.weatherfish.data.settings.SettingsSerializer
 import dev.rogerbertan.weatherfish.data.settings.StoredSettings
 import dev.rogerbertan.weatherfish.data.xweather.XweatherWeatherRepository
 import dev.rogerbertan.weatherfish.domain.ActiveLocation
+import dev.rogerbertan.weatherfish.domain.QrScanner
 import dev.rogerbertan.weatherfish.domain.UserPreferences
 import dev.rogerbertan.weatherfish.domain.WeatherRepository
 import javax.inject.Provider
@@ -48,7 +54,20 @@ abstract class DataModule {
     @Binds
     abstract fun locationProvider(impl: FusedLocationProvider): LocationProvider
 
+    @Binds
+    abstract fun qrScanner(impl: GmsQrScanner): QrScanner
+
     companion object {
+        @Provides
+        fun gmsBarcodeScanner(@ApplicationContext context: Context): GmsBarcodeScanner =
+            GmsBarcodeScanning.getClient(
+                context,
+                GmsBarcodeScannerOptions.Builder()
+                    .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
+                    .enableAutoZoom()
+                    .build(),
+            )
+
         @Provides
         fun dataSourceConfig() = DataSourceConfig(useFake = false)
 

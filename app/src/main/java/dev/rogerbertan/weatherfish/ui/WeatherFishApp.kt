@@ -44,6 +44,7 @@ import dev.rogerbertan.weatherfish.ui.details.DetailsScreen
 import dev.rogerbertan.weatherfish.ui.favorites.FavoritesScreen
 import dev.rogerbertan.weatherfish.ui.map.MapScreen
 import dev.rogerbertan.weatherfish.ui.search.SearchScreen
+import dev.rogerbertan.weatherfish.ui.share.CameraScanScreen
 import dev.rogerbertan.weatherfish.ui.share.ImportPlaceDialog
 import dev.rogerbertan.weatherfish.ui.share.ShareScreen
 import dev.rogerbertan.weatherfish.ui.today.TodayScreen
@@ -59,7 +60,9 @@ import kotlinx.serialization.Serializable
 @Serializable data object WeekRoute
 @Serializable data object SearchRoute
 @Serializable data object MapRoute
+@Serializable data object ShareGraph
 @Serializable data object ShareRoute
+@Serializable data object CameraScanRoute
 @Serializable data class ImportPlaceRoute(val name: String = "", val lat: String = "", val lon: String = "")
 
 enum class TopLevelDestination(
@@ -72,7 +75,7 @@ enum class TopLevelDestination(
     Week(WeekRoute::class, DeepLinks.WEEK, R.string.nav_week, Icons.Outlined.CalendarMonth),
     Search(SearchRoute::class, DeepLinks.SEARCH, R.string.nav_search, Icons.Outlined.Search),
     Map(MapRoute::class, DeepLinks.MAP, R.string.nav_map, Icons.Outlined.Map),
-    Share(ShareRoute::class, DeepLinks.SHARE, R.string.nav_share, Icons.Outlined.Share),
+    Share(ShareGraph::class, DeepLinks.SHARE, R.string.nav_share, Icons.Outlined.Share),
 }
 
 @Composable
@@ -133,8 +136,21 @@ fun WeatherFishApp(newIntents: Flow<Intent>, modifier: Modifier = Modifier) {
                 )
             }
             composable<MapRoute>(deepLinks = linkTo<MapRoute>(DeepLinks.MAP)) { MapScreen() }
-            composable<ShareRoute>(deepLinks = linkTo<ShareRoute>(DeepLinks.SHARE)) {
-                ShareScreen(onOpenLink = navController::navigateTo)
+            navigation<ShareGraph>(startDestination = ShareRoute, deepLinks = linkTo<ShareGraph>(DeepLinks.SHARE)) {
+                composable<ShareRoute> {
+                    ShareScreen(
+                        onOpenLink = navController::navigateTo,
+                        onOpenCamera = navController::navigateToCameraScan,
+                    )
+                }
+                composable<CameraScanRoute>(deepLinks = linkTo<CameraScanRoute>(DeepLinks.CAMERA_SCAN)) {
+                    CameraScanScreen(
+                        onLinkScanned = { link ->
+                            navController.navigateTo(link, navOptions { popUpTo<CameraScanRoute> { inclusive = true } })
+                        },
+                        onBack = navController::navigateUp,
+                    )
+                }
             }
             dialog<ImportPlaceRoute>(
                 deepLinks = linkTo<ImportPlaceRoute>(DeepLinks.PLACE),
@@ -151,12 +167,17 @@ private inline fun <reified T : Any> linkTo(basePath: String) = listOf(navDeepLi
 private fun NavController.openLink(link: String) {
     when {
         TopLevelDestination.entries.any { it.link == link } -> navigateToTopLevel(link)
+        link == DeepLinks.CAMERA_SCAN -> navigateToCameraScan()
         graph.hasDeepLink(link.toUri()) -> navigateTo(link)
     }
 }
 
 private fun NavController.navigateTo(link: String, navOptions: NavOptions? = null) {
     navigate(NavDeepLinkRequest.Builder.fromUri(link.toUri()).build(), navOptions)
+}
+
+private fun NavController.navigateToCameraScan() {
+    navigateTo(DeepLinks.CAMERA_SCAN, navOptions { launchSingleTop = true })
 }
 
 private fun NavController.navigateToTopLevel(link: String) {

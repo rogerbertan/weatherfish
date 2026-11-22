@@ -13,6 +13,7 @@ object DeepLinks {
     const val SEARCH = "${BASE}search"
     const val MAP = "${BASE}map"
     const val SHARE = "${BASE}share"
+    const val CAMERA_SCAN = "$SHARE/scan"
     const val PLACE = PlaceQrCodec.PLACE_URI
 
     fun place(name: String, point: GeoPoint): String = PlaceQrCodec.encode(name, point)

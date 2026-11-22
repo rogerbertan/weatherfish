@@ -60,8 +60,17 @@
     <string name="share_qr_description">QR code de %1$s</string>
     <string name="share_caption">Mostre este código para outro aparelho com o WeatherFish salvar a cidade nas favoritas.</string>
     <string name="share_scan">Ler com scanner do Google</string>
+    <string name="share_scan_camera">Ler com a câmera do app</string>
     <string name="share_invalid_code">Este QR não é de uma cidade do WeatherFish.</string>
     <string name="share_scan_failed">Não foi possível abrir o scanner. Tente de novo.</string>
+
+    <string name="camera_scan_title">Ler QR</string>
+    <string name="camera_scan_hint">Aponte para o QR de outro aparelho</string>
+    <string name="camera_permission_denied">O WeatherFish precisa da câmera para ler o QR de outro aparelho.</string>
+    <string name="camera_permission_blocked">A câmera está bloqueada para o WeatherFish. Libere a permissão nas configurações do app.</string>
+    <string name="camera_unavailable">Este aparelho não tem uma câmera que o WeatherFish possa usar.</string>
+    <string name="camera_permission_allow">Permitir câmera</string>
+    <string name="camera_permission_settings">Abrir configurações</string>
 
     <string name="import_title">Salvar cidade</string>
     <string name="import_confirm">Salvar %1$s nas favoritas?</string>

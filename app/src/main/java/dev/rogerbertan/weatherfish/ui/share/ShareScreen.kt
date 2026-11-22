@@ -1,5 +1,6 @@
 package dev.rogerbertan.weatherfish.ui.share
 
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,10 +12,12 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.PhotoCamera
 import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -26,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -36,6 +40,7 @@ import dev.rogerbertan.weatherfish.R
 @Composable
 fun ShareScreen(
     onOpenLink: (String) -> Unit,
+    onOpenCamera: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ShareViewModel = hiltViewModel(),
 ) {
@@ -56,16 +61,29 @@ fun ShareScreen(
             viewModel.messageShown()
         }
     }
+    val context = LocalContext.current
+    val hasCamera = remember { context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY) }
     Box(modifier = modifier.fillMaxSize()) {
         uiState.qr?.let { qr ->
-            ShareContent(qr = qr, isScanning = uiState.isScanning, onScan = viewModel::scan)
+            ShareContent(
+                qr = qr,
+                isScanning = uiState.isScanning,
+                onScan = viewModel::scan,
+                onOpenCamera = onOpenCamera.takeIf { hasCamera },
+            )
         }
         SnackbarHost(hostState = snackbarHostState, modifier = Modifier.align(Alignment.BottomCenter))
     }
 }
 
 @Composable
-private fun ShareContent(qr: SharedQr, isScanning: Boolean, onScan: () -> Unit, modifier: Modifier = Modifier) {
+private fun ShareContent(
+    qr: SharedQr,
+    isScanning: Boolean,
+    onScan: () -> Unit,
+    onOpenCamera: (() -> Unit)?,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -94,11 +112,20 @@ private fun ShareContent(qr: SharedQr, isScanning: Boolean, onScan: () -> Unit, 
             }
             Text(text = stringResource(R.string.share_scan), modifier = Modifier.padding(start = ButtonDefaults.IconSpacing))
         }
+        if (onOpenCamera != null) {
+            FilledTonalButton(onClick = onOpenCamera, enabled = !isScanning) {
+                Icon(Icons.Outlined.PhotoCamera, contentDescription = null, modifier = Modifier.size(ButtonDefaults.IconSize))
+                Text(
+                    text = stringResource(R.string.share_scan_camera),
+                    modifier = Modifier.padding(start = ButtonDefaults.IconSpacing),
+                )
+            }
+        }
     }
 }
 
 @Composable
-private fun ShareMessage.text(): String = when (this) {
+fun ShareMessage.text(): String = when (this) {
     ShareMessage.InvalidCode -> stringResource(R.string.share_invalid_code)
     ShareMessage.ScanFailed -> stringResource(R.string.share_scan_failed)
 }

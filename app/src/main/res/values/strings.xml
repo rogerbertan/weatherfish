@@ -50,11 +50,28 @@
     <string name="favorite_remove">Remover das favoritas</string>
     <string name="favorites_title">Favoritas</string>
     <string name="favorites_current_location">Minha localização</string>
-    <string name="favorites_empty">Nenhuma cidade favorita ainda. Use a estrela na busca ou na tela Hoje.</string>
+    <string name="favorites_empty">Nenhuma cidade favorita ainda. Use a estrela na busca ou na tela Hoje, ou leia o QR de outro aparelho em Compartilhar.</string>
     <string name="favorites_unit">Unidade de temperatura</string>
     <string name="unit_celsius">°C</string>
     <string name="unit_fahrenheit">°F</string>
 
     <string name="map_placeholder">O mapa ainda não está disponível</string>
-    <string name="share_placeholder">O compartilhamento ainda não está disponível</string>
+
+    <string name="share_qr_description">QR code de %1$s</string>
+    <string name="share_caption">Mostre este código para outro aparelho com o WeatherFish salvar a cidade nas favoritas.</string>
+    <string name="share_scan">Ler com scanner do Google</string>
+    <string name="share_invalid_code">Este QR não é de uma cidade do WeatherFish.</string>
+    <string name="share_scan_failed">Não foi possível abrir o scanner. Tente de novo.</string>
+
+    <string name="import_title">Salvar cidade</string>
+    <string name="import_confirm">Salvar %1$s nas favoritas?</string>
+    <string name="import_save">Salvar</string>
+    <string name="import_saving">Salvando %1$s…</string>
+    <string name="import_saved">%1$s salva nas favoritas. Local: %2$s.</string>
+    <string name="import_already_saved">%1$s já está nas favoritas.</string>
+    <string name="import_invalid_link">Este link não é de uma cidade do WeatherFish.</string>
+    <string name="import_failed">Não foi possível salvar a cidade. Confira sua internet e tente de novo.</string>
+    <string name="ok">OK</string>
+    <string name="close">Fechar</string>
+    <string name="cancel">Cancelar</string>
 </resources>

@@ -63,15 +63,17 @@ A API devolve a temperatura em Celsius, e a UI converte para Fahrenheit ao forma
 
 A tela Compartilhar mostra um QR com o conteúdo `weatherfish://place?name=...&lat=...&lon=...`. O `PlaceQrCodec`, em `domain`, monta esse texto só com classes do Java.
 
-O conteúdo do QR também é um deep link. O aparelho B chega a ele de dois jeitos: pelo scanner da aba Compartilhar ou pela câmera nativa do celular, que abre o app direto. Nos dois casos, o Navigation lê o link, e o `PlaceQrCodec.fromParams` valida os parâmetros. Ele rejeita parâmetro faltando, coordenada fora da faixa, nome com mais de 100 caracteres e nome com caracteres de controle. Os dois caminhos terminam no mesmo diálogo de importação.
+O conteúdo do QR também é um deep link. O aparelho B chega a ele de três jeitos. Na aba Compartilhar, ele lê o QR com o scanner do Google ou com a câmera do app. Fora do app, a câmera nativa do celular lê o QR e abre o app direto. Nos três casos, o Navigation lê o link, e o `PlaceQrCodec.fromParams` valida os parâmetros. Ele rejeita parâmetro faltando, coordenada fora da faixa, nome com mais de 100 caracteres e nome com caracteres de controle. Os três caminhos terminam no mesmo diálogo de importação.
 
 Qualquer página ou app pode montar um link `place`, então o diálogo pergunta "Salvar {nome} nas favoritas?" antes de salvar. Depois do Salvar, ele mostra a região e o país que a Xweather devolveu, para o usuário conferir se o nome bate com o lugar.
 
 ```mermaid
 flowchart LR
     A["Aparelho A<br/>ShareScreen"] -->|QR com o link place| Scan["Aparelho B<br/>scanner do Google"]
+    A -->|QR com o link place| AppCam["Aparelho B<br/>câmera do app"]
     A -->|QR com o link place| Cam["Aparelho B<br/>câmera nativa"]
     Scan -->|navigateTo| Dialog["ImportPlaceDialog"]
+    AppCam -->|navigateTo| Dialog
     Cam -->|Intent VIEW| Dialog
     Dialog -->|placeAt| Repo["WeatherRepository"]
     Dialog -->|addFavorite| Prefs["UserPreferences"]
@@ -79,7 +81,9 @@ flowchart LR
 
 O QR leva só o nome e o ponto. Um `Place` também precisa de região, país e fuso, então o aparelho B chama `placeAt` com o ponto lido. Da resposta, ele usa a região, o país e o fuso. O nome e o ponto vêm do QR, porque o ponto é a identidade da favorita. Se o ponto já é favorito, o aparelho B avisa e não chama o `placeAt`.
 
-O ZXing core gera a `BitMatrix`, e o `QrCode`, em `ui/share`, desenha essa matriz num `Path` com `drawWithCache`. A leitura usa a tela pronta do Google, que roda no Play Services e não pede permissão de câmera ao app. O ViewModel conhece só a interface `QrScanner`. A implementação `GmsQrScanner` fica em `data/scanner`.
+O ZXing core gera a `BitMatrix`, e o `QrCode`, em `ui/share`, desenha essa matriz num `Path` com `drawWithCache`. A leitura tem duas variantes. A primeira usa a tela pronta do Google, que roda no Play Services e não pede permissão de câmera ao app. O ViewModel conhece só a interface `QrScanner`, e a implementação `GmsQrScanner` fica em `data/scanner`.
+
+A segunda é a tela `CameraScanScreen`, que abre a câmera dentro do app. Ela pede a permissão `CAMERA` e mostra o preview da CameraX com um overlay da área de leitura. O ML Kit lê cada frame, e o `CameraScanViewModel` só aceita um código depois de vê-lo em 3 frames seguidos. Quando o link `place` é confirmado, a análise para, e a tela navega para o diálogo, tirando a câmera da pilha. Essa variante não cabe atrás de uma interface de `domain`, porque o preview é uma view. Por isso o `QrCameraView` é o único arquivo de `ui` que importa ML Kit e CameraX. A comparação entre as duas está em [Fase 4 contra Fase 5](qr-camera-comparison.md).
 
 ## Toda tela abre por um deep link
 
@@ -94,6 +98,7 @@ Cada tela tem um endereço `weatherfish://`, e o objeto `DeepLinks` guarda todos
 | `weatherfish://search` | Busca |
 | `weatherfish://map` | Mapa |
 | `weatherfish://share` | Compartilhar |
+| `weatherfish://share/scan` | Leitura do QR pela câmera do app |
 | `weatherfish://place?name=...&lat=...&lon=...` | Diálogo que pergunta se deve salvar a cidade nas favoritas |
 
 A navegação dentro do app usa esses mesmos links. A bottom bar, o botão de detalhes, o de favoritas e a busca chamam `navigateTo(link)`. Assim, toda tela abre por link antes de existir um botão para ela. Um push ou um QR usa a mesma navegação que os botões.

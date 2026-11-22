@@ -9,14 +9,14 @@ O app tem cinco abas:
 - **Hoje** mostra a condição atual e a previsão por hora, com acesso aos detalhes e às favoritas.
 - **Semana** mostra a previsão diária dos próximos 7 dias.
 - **Busca** encontra cidades. Tocar num resultado troca a cidade ativa, e a estrela favorita a cidade.
-- **Compartilhar** mostra um QR da cidade ativa. O botão "Ler com scanner do Google" lê o QR de outro aparelho e salva a cidade nas favoritas.
+- **Compartilhar** mostra um QR da cidade ativa. Dois botões leem o QR de outro aparelho e salvam a cidade nas favoritas. "Ler com scanner do Google" abre a tela pronta do Google. "Ler com a câmera do app" abre a câmera dentro do WeatherFish.
 - **Mapa** ainda é um placeholder.
 
 Toda tela abre por um deep link `weatherfish://`, como `weatherfish://week`. A lista completa está em [Arquitetura](docs/architecture.md). Ler o QR da Compartilhar com a câmera nativa do celular abre o WeatherFish e pergunta se você quer salvar a cidade.
 
 A tela **Favoritas** abre pela Hoje. Ela lista as cidades salvas, tem um atalho para a localização atual e troca a unidade entre °C e °F.
 
-O app segue MVVM e tem um único módulo Gradle. Ele usa Hilt, coroutines com Flow, DataStore e Navigation Compose. O app gera o QR com o ZXing core e lê o QR com o Google code scanner, que não pede permissão de câmera ao app.
+O app segue MVVM e tem um único módulo Gradle. Ele usa Hilt, coroutines com Flow, DataStore e Navigation Compose. O app gera o QR com o ZXing core. Ele lê o QR de dois jeitos: com o Google code scanner, que não pede permissão de câmera ao app, ou com CameraX e ML Kit, que pedem.
 
 ## Como executar
 
@@ -61,3 +61,4 @@ A pasta `docs/` tem o resto da documentação:
 - [Spike do SDK Aeris](docs/aeris-spike.md) registra as respostas da API Xweather e o comportamento do SDK.
 - [Antes e depois do Aeris](docs/aeris-comparison.md) mede o impacto do SDK no APK, no manifest e nas dependências.
 - [Antes e depois do QR](docs/qr-comparison.md) mede o impacto do ZXing e do scanner do Google, e registra o que o scanner devolve em cada caso.
+- [Fase 4 contra Fase 5](docs/qr-camera-comparison.md) compara o scanner do Google com a câmera do app em linhas, permissões, APK, lifecycle e customização.

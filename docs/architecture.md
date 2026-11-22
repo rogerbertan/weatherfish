@@ -59,6 +59,53 @@ O DataStore guarda as favoritas, a última cidade e a unidade de temperatura no 
 
 A API devolve a temperatura em Celsius, e a UI converte para Fahrenheit ao formatar. Trocar a unidade não faz request novo.
 
+## Uma cidade passa de um aparelho para outro por QR
+
+A tela Compartilhar mostra um QR com o conteúdo `weatherfish://place?name=...&lat=...&lon=...`. O `PlaceQrCodec`, em `domain`, monta esse texto só com classes do Java.
+
+O conteúdo do QR também é um deep link. O aparelho B chega a ele de dois jeitos: pelo scanner da aba Compartilhar ou pela câmera nativa do celular, que abre o app direto. Nos dois casos, o Navigation lê o link, e o `PlaceQrCodec.fromParams` valida os parâmetros. Ele rejeita parâmetro faltando, coordenada fora da faixa, nome com mais de 100 caracteres e nome com caracteres de controle. Os dois caminhos terminam no mesmo diálogo de importação.
+
+Qualquer página ou app pode montar um link `place`, então o diálogo pergunta "Salvar {nome} nas favoritas?" antes de salvar. Depois do Salvar, ele mostra a região e o país que a Xweather devolveu, para o usuário conferir se o nome bate com o lugar.
+
+```mermaid
+flowchart LR
+    A["Aparelho A<br/>ShareScreen"] -->|QR com o link place| Scan["Aparelho B<br/>scanner do Google"]
+    A -->|QR com o link place| Cam["Aparelho B<br/>câmera nativa"]
+    Scan -->|navigateTo| Dialog["ImportPlaceDialog"]
+    Cam -->|Intent VIEW| Dialog
+    Dialog -->|placeAt| Repo["WeatherRepository"]
+    Dialog -->|addFavorite| Prefs["UserPreferences"]
+```
+
+O QR leva só o nome e o ponto. Um `Place` também precisa de região, país e fuso, então o aparelho B chama `placeAt` com o ponto lido. Da resposta, ele usa a região, o país e o fuso. O nome e o ponto vêm do QR, porque o ponto é a identidade da favorita. Se o ponto já é favorito, o aparelho B avisa e não chama o `placeAt`.
+
+O ZXing core gera a `BitMatrix`, e o `QrCode`, em `ui/share`, desenha essa matriz num `Path` com `drawWithCache`. A leitura usa a tela pronta do Google, que roda no Play Services e não pede permissão de câmera ao app. O ViewModel conhece só a interface `QrScanner`. A implementação `GmsQrScanner` fica em `data/scanner`.
+
+## Toda tela abre por um deep link
+
+Cada tela tem um endereço `weatherfish://`, e o objeto `DeepLinks` guarda todos eles:
+
+| Link | Tela |
+| --- | --- |
+| `weatherfish://today` | Hoje |
+| `weatherfish://today/details` | Detalhes |
+| `weatherfish://today/favorites` | Favoritas |
+| `weatherfish://week` | Semana |
+| `weatherfish://search` | Busca |
+| `weatherfish://map` | Mapa |
+| `weatherfish://share` | Compartilhar |
+| `weatherfish://place?name=...&lat=...&lon=...` | Diálogo que pergunta se deve salvar a cidade nas favoritas |
+
+A navegação dentro do app usa esses mesmos links. A bottom bar, o botão de detalhes, o de favoritas e a busca chamam `navigateTo(link)`. Assim, toda tela abre por link antes de existir um botão para ela. Um push ou um QR usa a mesma navegação que os botões.
+
+Um link que vem de fora chega como `Intent` na `MainActivity`:
+
+| Situação | O que acontece |
+| --- | --- |
+| App fechado | O Navigation lê o `Intent` ao montar o grafo e cria uma pilha que começa na Hoje, para o voltar não sair do app |
+| App aberto | A `MainActivity` recebe o link no `onNewIntent`, e o app navega sobre a pilha atual sem perder o estado das abas |
+| App reaberto pelos recentes | O link que abriu o app da primeira vez é descartado, para não salvar a cidade de novo nem voltar sempre à mesma tela |
+
 ## Os dados falsos rodam o app sem chave
 
 Os JSONs de `app/src/main/assets/fake/` imitam as respostas da Xweather, com um arquivo por endpoint. O `FakeWeatherRepository` lê esses arquivos quando a flag `DataSourceConfig.useFake` do `DataModule` está ligada. A latência e o erro simulado ficam no `FakeConfig`.

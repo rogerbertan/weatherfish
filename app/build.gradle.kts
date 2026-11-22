@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.android.junit)
+    alias(libs.plugins.pitest)
 }
 
 val localProperties = Properties().apply {
@@ -62,6 +63,47 @@ android {
         compose = true
         buildConfig = true
     }
+}
+
+pitest {
+    pitestVersion = libs.versions.pitest
+    junit5PluginVersion = libs.versions.pitestJunit5
+    targetClasses = setOf("dev.rogerbertan.weatherfish.*")
+    excludedClasses = setOf(
+        "dev.rogerbertan.weatherfish.di.*",
+        "dev.rogerbertan.weatherfish.ui.theme.*",
+        "dev.rogerbertan.weatherfish.ui.WeatherFishAppKt*",
+        "dev.rogerbertan.weatherfish.ui.*ScreenKt*",
+        "dev.rogerbertan.weatherfish.ui.share.*Kt*",
+        "dev.rogerbertan.weatherfish.ui.common.LoadStateContentKt*",
+        "dev.rogerbertan.weatherfish.ui.common.PlaceholderKt*",
+        "dev.rogerbertan.weatherfish.ui.common.FavoriteButtonKt*",
+        "dev.rogerbertan.weatherfish.ui.common.ConditionIconKt*",
+        "dev.rogerbertan.weatherfish.BuildConfig",
+        "dev.rogerbertan.weatherfish.MainActivity*",
+        "dev.rogerbertan.weatherfish.WeatherFishApplication*",
+        "*Hilt_*",
+        "*_Factory*",
+        "*_HiltModules*",
+        "*_MembersInjector*",
+        "*_GeneratedInjector",
+        "*_ComponentTreeDeps",
+        "*_Impl*",
+        "Dagger*",
+        "hilt_aggregated_deps.*",
+        "*\$\$serializer",
+        "*ComposableSingletons*",
+    )
+    excludedTestClasses = setOf("dev.rogerbertan.weatherfish.ArchitectureTest")
+    avoidCallsTo = setOf(
+        "kotlin.jvm.internal",
+        "kotlin.ResultKt",
+        "kotlin.coroutines.jvm.internal",
+        "kotlinx.coroutines",
+    )
+    threads = 4
+    outputFormats = setOf("HTML", "XML")
+    timestampedReports = false
 }
 
 dependencies {

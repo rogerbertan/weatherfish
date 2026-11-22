@@ -23,6 +23,9 @@ playServicesCodeScanner = "16.1.0"
 zxing = "3.5.4"
 camerax = "1.7.0"
 mlkitBarcodeScanning = "17.3.0"
+pitest = "1.30.2"
+pitestJunit5 = "1.2.3"
+pitestGradle = "0.3.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -69,3 +72,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 android-junit = { id = "de.mannodermaus.android-junit", version.ref = "androidJunit" }
+pitest = { id = "pl.droidsonroids.pitest", version.ref = "pitestGradle" }

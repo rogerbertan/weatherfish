@@ -86,6 +86,10 @@ dependencies {
     implementation(libs.play.services.location)
     implementation(libs.play.services.code.scanner)
     implementation(libs.zxing.core)
+    implementation(libs.androidx.camera.camera2)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.mlkit.vision)
+    implementation(libs.mlkit.barcode.scanning)
     implementation(libs.aeris.core) {
         isTransitive = false
     }

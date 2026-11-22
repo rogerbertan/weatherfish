@@ -84,6 +84,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.play.services)
     implementation(libs.androidx.datastore)
     implementation(libs.play.services.location)
+    implementation(libs.play.services.code.scanner)
+    implementation(libs.zxing.core)
     implementation(libs.aeris.core) {
         isTransitive = false
     }

@@ -19,6 +19,8 @@ aeris = "2.7.1"
 gson = "2.15.0"
 datastore = "1.3.0"
 playServicesLocation = "21.4.0"
+playServicesCodeScanner = "16.1.0"
+zxing = "3.5.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,6 +44,8 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 kotlinx-coroutines-play-services = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "coroutines" }
 androidx-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
+play-services-code-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "playServicesCodeScanner" }
+zxing-core = { group = "com.google.zxing", name = "core", version.ref = "zxing" }
 aeris-core = { group = "com.aerisweather", name = "aeris-core-lib", version.ref = "aeris" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 konsist = { group = "com.lemonappdev", name = "konsist", version.ref = "konsist" }

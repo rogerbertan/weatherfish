@@ -40,6 +40,7 @@ Use sempre o wrapper (`./gradlew`):
 ./gradlew test                           # testes unitários (JVM, JUnit 5)
 ./gradlew testDebugUnitTest --tests "dev.rogerbertan.weatherfish.ArchitectureTest"         # uma classe
 ./gradlew testDebugUnitTest --tests "*TodayViewModelTest.should show error*"               # um teste
+./gradlew pitestDebug                    # testes de mutação com PIT, relatório em app/build/reports/pitest/debug
 ./gradlew connectedDebugAndroidTest      # testes instrumentados (exige device/emulador)
 ./gradlew lint                           # Android Lint
 ```
@@ -51,6 +52,7 @@ Use sempre o wrapper (`./gradlew`):
 - O plugin `kotlin-serialization` usa a mesma versão `kotlin` do catálogo. Ele serve às rotas type-safe do Navigation e ao parsing dos JSONs com `kotlinx-serialization-json`.
 - Os ícones vêm de `material-icons-extended`, com a versão definida pelo Compose BOM.
 - Os testes usam JUnit 5, com a versão definida pelo `junit-bom`. O plugin `de.mannodermaus.android-junit` liga a JUnit Platform nos testes locais e nos instrumentados. Nenhum teste usa JUnit 4. O `androidx.test:runner`, que o plugin adiciona, ainda traz o `junit:junit` de forma transitiva nos testes instrumentados, porque o `AndroidJUnitRunner` depende dele. Não adicione `junit:junit`, `androidx.test.ext:junit` nem `ui-test-junit4` como dependência direta. Fique na linha 5.x do JUnit. A troca para a 6.x só acontece se o usuário pedir.
+- Os testes de mutação usam o PIT pelo plugin `pl.droidsonroids.pitest`, o fork do plugin do PIT para Android, com o `pitest-junit5-plugin`. As versões `pitest`, `pitestJunit5` e `pitestGradle` ficam no catálogo. O PIT muta o bytecode e só roda os testes locais. O bloco `pitest` do `app/build.gradle.kts` exclui o código gerado pelo Hilt e pelo kotlinx-serialization, o `di`, o tema e os arquivos que só têm Composables, porque nenhum teste local os cobre. Por isso o `nextCameraRefusal`, que mora no `CameraScanScreen.kt`, fica de fora. O `ArchitectureTest` também fica de fora, porque o Konsist lê o código-fonte e não mata mutantes. O `avoidCallsTo` descarta mutações nas chamadas que o compilador Kotlin gera, como `Intrinsics` e `ResultKt.throwOnFailure` da máquina de estados das coroutines. Ainda sobram mutantes falsos de `return null` em `invokeSuspend`, `emit` e `collect`. Só o plugin Kotlin da Arcmutate, que é pago, filtra esses casos.
 - O Compose BOM está em 2026.09.00. O Compose 1.13, que vem nos BOMs mais novos, exige `compileSdk` 37.1, e esta máquina só tem a plataforma `android-37.0`.
 - Dependências e plugins ficam no version catalog `gradle/libs.versions.toml` e são referenciados como `libs.*`. Adicione novas dependências lá, não com strings inline.
 - `settings.gradle.kts` usa `RepositoriesMode.FAIL_ON_PROJECT_REPOS`: repositórios só podem ser declarados lá, nunca em `build.gradle.kts` de módulos.

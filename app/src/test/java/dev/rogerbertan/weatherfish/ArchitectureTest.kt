@@ -33,9 +33,32 @@ class ArchitectureTest {
             "com.google.gson",
             "com.mapbox",
             "com.google.android.gms",
-            "com.google.mlkit",
             "androidx.datastore",
         )
+
+        // Assert
+        assertEquals(emptyList<String>(), offenders)
+    }
+
+    @Test
+    fun `should import ml kit in domain and ui only in the camera view`() {
+        // Arrange
+        val files = (filesInLayer("domain") + filesInLayer("ui")).filterNot { it.name == CAMERA_VIEW }
+
+        // Act
+        val offenders = files.importing("com.google.mlkit")
+
+        // Assert
+        assertEquals(emptyList<String>(), offenders)
+    }
+
+    @Test
+    fun `should import camerax only in the camera view`() {
+        // Arrange
+        val files = productionFiles.filterNot { it.name == CAMERA_VIEW }
+
+        // Act
+        val offenders = files.importing("androidx.camera")
 
         // Assert
         assertEquals(emptyList<String>(), offenders)
@@ -87,5 +110,9 @@ class ArchitectureTest {
 
         // Assert
         assertEquals(emptyList<String>(), offenders)
+    }
+
+    private companion object {
+        const val CAMERA_VIEW = "QrCameraView"
     }
 }

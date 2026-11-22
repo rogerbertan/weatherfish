@@ -33,8 +33,21 @@ class ArchitectureTest {
             "com.google.gson",
             "com.mapbox",
             "com.google.android.gms",
+            "com.google.mlkit",
             "androidx.datastore",
         )
+
+        // Assert
+        assertEquals(emptyList<String>(), offenders)
+    }
+
+    @Test
+    fun `should keep domain free of qr rendering imports`() {
+        // Arrange
+        val files = filesInLayer("domain")
+
+        // Act
+        val offenders = files.importing("com.google.zxing")
 
         // Assert
         assertEquals(emptyList<String>(), offenders)

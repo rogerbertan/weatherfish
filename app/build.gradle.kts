@@ -40,11 +40,7 @@ android {
             "XWEATHER_CLIENT_SECRET",
             "\"${localProperties.getProperty("XWEATHER_CLIENT_SECRET", "")}\"",
         )
-        buildConfigField(
-            "String",
-            "MAPBOX_ACCESS_TOKEN",
-            "\"${localProperties.getProperty("MAPBOX_ACCESS_TOKEN", "")}\"",
-        )
+        resValue("string", "mapbox_access_token", localProperties.getProperty("MAPBOX_ACCESS_TOKEN", ""))
     }
 
     buildTypes {
@@ -62,6 +58,7 @@ android {
     buildFeatures {
         compose = true
         buildConfig = true
+        resValues = true
     }
 }
 
@@ -75,6 +72,7 @@ pitest {
         "dev.rogerbertan.weatherfish.ui.WeatherFishAppKt*",
         "dev.rogerbertan.weatherfish.ui.*ScreenKt*",
         "dev.rogerbertan.weatherfish.ui.share.*Kt*",
+        "dev.rogerbertan.weatherfish.ui.map.WeatherMapViewKt*",
         "dev.rogerbertan.weatherfish.ui.common.LoadStateContentKt*",
         "dev.rogerbertan.weatherfish.ui.common.PlaceholderKt*",
         "dev.rogerbertan.weatherfish.ui.common.FavoriteButtonKt*",
@@ -136,6 +134,9 @@ dependencies {
         isTransitive = false
     }
     implementation(libs.gson)
+    implementation(libs.mapsgl)
+    implementation(libs.mapbox.maps)
+    implementation(libs.mapbox.maps.compose)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)

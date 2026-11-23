@@ -23,6 +23,8 @@ playServicesCodeScanner = "16.1.0"
 zxing = "3.5.4"
 camerax = "1.7.0"
 mlkitBarcodeScanning = "17.3.0"
+mapsgl = "v1.8.0"
+mapbox = "11.15.3"
 pitest = "1.30.2"
 pitestJunit5 = "1.2.3"
 pitestGradle = "0.3.0"
@@ -55,7 +57,10 @@ androidx-camera-camera2 = { group = "androidx.camera", name = "camera-camera2", 
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "camerax" }
 androidx-camera-mlkit-vision = { group = "androidx.camera", name = "camera-mlkit-vision", version.ref = "camerax" }
 mlkit-barcode-scanning = { group = "com.google.mlkit", name = "barcode-scanning", version.ref = "mlkitBarcodeScanning" }
-aeris-core = { group = "com.aerisweather", name = "aeris-core-lib", version.ref = "aeris" }
+mapsgl = { group = "com.github.vaisala-xweather", name = "mapsgl-android-sdk", version.ref = "mapsgl" }
+mapbox-maps = { group = "com.mapbox.maps", name = "android-ndk27", version.ref = "mapbox" }
+mapbox-maps-compose = { group = "com.mapbox.extension", name = "maps-compose-ndk27", version.ref = "mapbox" }
+aeris-core ={ group = "com.aerisweather", name = "aeris-core-lib", version.ref = "aeris" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 konsist = { group = "com.lemonappdev", name = "konsist", version.ref = "konsist" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }

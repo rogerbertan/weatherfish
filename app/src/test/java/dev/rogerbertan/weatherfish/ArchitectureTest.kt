@@ -31,10 +31,21 @@ class ArchitectureTest {
         val offenders = files.importing(
             "dev.rogerbertan.weatherfish.data",
             "com.google.gson",
-            "com.mapbox",
             "com.google.android.gms",
             "androidx.datastore",
         )
+
+        // Assert
+        assertEquals(emptyList<String>(), offenders)
+    }
+
+    @Test
+    fun `should import mapbox and mapsgl only in the map view`() {
+        // Arrange
+        val files = productionFiles.filterNot { it.name == MAP_VIEW }
+
+        // Act
+        val offenders = files.importing("com.mapbox", "com.xweather.mapsgl")
 
         // Assert
         assertEquals(emptyList<String>(), offenders)
@@ -114,5 +125,6 @@ class ArchitectureTest {
 
     private companion object {
         const val CAMERA_VIEW = "QrCameraView"
+        const val MAP_VIEW = "WeatherMapView"
     }
 }

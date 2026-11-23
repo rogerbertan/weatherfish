@@ -26,8 +26,10 @@ import dev.rogerbertan.weatherfish.data.scanner.GmsQrScanner
 import dev.rogerbertan.weatherfish.data.settings.DataStoreUserPreferences
 import dev.rogerbertan.weatherfish.data.settings.SettingsSerializer
 import dev.rogerbertan.weatherfish.data.settings.StoredSettings
+import dev.rogerbertan.weatherfish.data.xweather.XweatherSdk
 import dev.rogerbertan.weatherfish.data.xweather.XweatherWeatherRepository
 import dev.rogerbertan.weatherfish.domain.ActiveLocation
+import dev.rogerbertan.weatherfish.domain.MapCredentialsProvider
 import dev.rogerbertan.weatherfish.domain.QrScanner
 import dev.rogerbertan.weatherfish.domain.UserPreferences
 import dev.rogerbertan.weatherfish.domain.WeatherRepository
@@ -69,7 +71,10 @@ abstract class DataModule {
             )
 
         @Provides
-        fun dataSourceConfig() = DataSourceConfig(useFake = false)
+        fun mapCredentialsProvider(): MapCredentialsProvider = XweatherSdk
+
+        @Provides
+        fun dataSourceConfig() =DataSourceConfig(useFake = false)
 
         @Provides
         fun fakeConfig() = FakeConfig(latency = 800.milliseconds, simulatedError = null)

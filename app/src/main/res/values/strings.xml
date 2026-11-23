@@ -55,7 +55,8 @@
     <string name="unit_celsius">°C</string>
     <string name="unit_fahrenheit">°F</string>
 
-    <string name="map_placeholder">O mapa ainda não está disponível</string>
+    <string name="map_unavailable">O mapa precisa das chaves da Xweather no local.properties</string>
+    <string name="map_wind">Vento</string>
 
     <string name="share_qr_description">QR code de %1$s</string>
     <string name="share_caption">Mostre este código para outro aparelho com o WeatherFish salvar a cidade nas favoritas.</string>

@@ -20,12 +20,16 @@ import dev.rogerbertan.weatherfish.data.CachingWeatherRepository
 import dev.rogerbertan.weatherfish.data.DeviceActiveLocation
 import dev.rogerbertan.weatherfish.data.fake.FakeConfig
 import dev.rogerbertan.weatherfish.data.fake.FakeWeatherRepository
+import dev.rogerbertan.weatherfish.data.location.AndroidReverseGeocoder
 import dev.rogerbertan.weatherfish.data.location.FusedLocationProvider
 import dev.rogerbertan.weatherfish.data.location.LocationProvider
+import dev.rogerbertan.weatherfish.data.location.ReverseGeocoder
+import dev.rogerbertan.weatherfish.data.openmeteo.OpenMeteoWeatherRepository
 import dev.rogerbertan.weatherfish.data.scanner.GmsQrScanner
 import dev.rogerbertan.weatherfish.data.settings.DataStoreUserPreferences
 import dev.rogerbertan.weatherfish.data.settings.SettingsSerializer
 import dev.rogerbertan.weatherfish.data.settings.StoredSettings
+import dev.rogerbertan.weatherfish.data.xweather.XweatherRestRepository
 import dev.rogerbertan.weatherfish.data.xweather.XweatherSdk
 import dev.rogerbertan.weatherfish.data.xweather.XweatherWeatherRepository
 import dev.rogerbertan.weatherfish.domain.ActiveLocation
@@ -33,6 +37,8 @@ import dev.rogerbertan.weatherfish.domain.MapCredentialsProvider
 import dev.rogerbertan.weatherfish.domain.QrScanner
 import dev.rogerbertan.weatherfish.domain.UserPreferences
 import dev.rogerbertan.weatherfish.domain.WeatherRepository
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.okhttp.OkHttp
 import javax.inject.Provider
 import javax.inject.Singleton
 import kotlin.time.Duration.Companion.milliseconds
@@ -41,7 +47,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 
-data class DataSourceConfig(val useFake: Boolean)
+enum class DataSource { Fake, XweatherSdk, XweatherRest, OpenMeteo }
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -55,6 +61,9 @@ abstract class DataModule {
 
     @Binds
     abstract fun locationProvider(impl: FusedLocationProvider): LocationProvider
+
+    @Binds
+    abstract fun reverseGeocoder(impl: AndroidReverseGeocoder): ReverseGeocoder
 
     @Binds
     abstract fun qrScanner(impl: GmsQrScanner): QrScanner
@@ -74,7 +83,7 @@ abstract class DataModule {
         fun mapCredentialsProvider(): MapCredentialsProvider = XweatherSdk
 
         @Provides
-        fun dataSourceConfig() =DataSourceConfig(useFake = false)
+        fun dataSource() = DataSource.OpenMeteo
 
         @Provides
         fun fakeConfig() = FakeConfig(latency = 800.milliseconds, simulatedError = null)
@@ -82,15 +91,26 @@ abstract class DataModule {
         @Provides
         @Singleton
         fun weatherRepository(
-            config: DataSourceConfig,
+            source: DataSource,
             fake: Provider<FakeWeatherRepository>,
-            xweather: Provider<XweatherWeatherRepository>,
+            xweatherSdk: Provider<XweatherWeatherRepository>,
+            xweatherRest: Provider<XweatherRestRepository>,
+            openMeteo: Provider<OpenMeteoWeatherRepository>,
             @ApplicationScope scope: CoroutineScope,
         ): WeatherRepository = CachingWeatherRepository(
-            delegate = if (config.useFake) fake.get() else xweather.get(),
+            delegate = when (source) {
+                DataSource.Fake -> fake.get()
+                DataSource.XweatherSdk -> xweatherSdk.get()
+                DataSource.XweatherRest -> xweatherRest.get()
+                DataSource.OpenMeteo -> openMeteo.get()
+            },
             timeSource = TimeSource.Monotonic,
             scope = scope,
         )
+
+        @Provides
+        @Singleton
+        fun httpClient(): HttpClient = HttpClient(OkHttp) { expectSuccess = false }
 
         @Provides
         @Singleton

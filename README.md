@@ -2,6 +2,10 @@
 
 O WeatherFish é um app Android de previsão do tempo, feito para estudo em Kotlin e Jetpack Compose. Ele abre com o clima do local do aparelho e mostra a condição atual, as próximas 24 horas e os próximos 7 dias. A busca e as favoritas trocam a cidade. Os dados vêm da [Xweather](https://www.xweather.com/) pelo SDK Aeris.
 
+|                                                            Hoje                                                             |                                                Semana                                                 |                                                        Compartilhar                                                        |
+|:---------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------------------------------------:|
+| <img src="docs/screenshots/today.png" alt="Aba Hoje com o clima atual e as próximas 24 horas em Florianópolis" width="240"> | <img src="docs/screenshots/week.png" alt="Aba Semana com a previsão dos próximos 7 dias" width="240"> | <img src="docs/screenshots/share.png" alt="Aba Compartilhar com o QR de Florianópolis e os botões de leitura" width="240"> |
+
 ## Funcionalidades
 
 O app tem cinco abas:

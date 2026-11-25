@@ -2,7 +2,11 @@ package dev.rogerbertan.weatherfish.data.fake
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
-import dev.rogerbertan.weatherfish.data.xweather.parsingOrThrow
+import dev.rogerbertan.weatherfish.data.parsingOrThrow
+import dev.rogerbertan.weatherfish.data.xweather.parseClosestPlace
+import dev.rogerbertan.weatherfish.data.xweather.parseConditions
+import dev.rogerbertan.weatherfish.data.xweather.parseDaily
+import dev.rogerbertan.weatherfish.data.xweather.parseHourly
 import dev.rogerbertan.weatherfish.domain.CurrentWeather
 import dev.rogerbertan.weatherfish.domain.DailyForecast
 import dev.rogerbertan.weatherfish.domain.GeoPoint
@@ -33,7 +37,7 @@ class FakeWeatherRepository @Inject constructor(
         load(FakeEndpoint.DailyForecast) { parseDaily(it, days) }
 
     override suspend fun searchPlaces(query: String): List<Place> =
-        load(FakeEndpoint.PlacesSearch) { parsePlaces(it, query) }
+        load(FakeEndpoint.PlacesSearch) { matchingPlaces(it, query) }
 
     override suspend fun placeAt(point: GeoPoint): Place =
         load(FakeEndpoint.PlacesClosest, ::parseClosestPlace)

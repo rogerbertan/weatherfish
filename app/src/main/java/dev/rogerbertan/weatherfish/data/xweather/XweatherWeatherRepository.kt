@@ -9,6 +9,7 @@ import com.aerisweather.aeris.communication.EndpointType
 import com.aerisweather.aeris.communication.parameter.ParameterBuilder
 import com.aerisweather.aeris.model.AerisDataJSON
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dev.rogerbertan.weatherfish.data.parsingOrThrow
 import dev.rogerbertan.weatherfish.domain.CurrentWeather
 import dev.rogerbertan.weatherfish.domain.DailyForecast
 import dev.rogerbertan.weatherfish.domain.GeoPoint
@@ -16,7 +17,6 @@ import dev.rogerbertan.weatherfish.domain.HourlyForecast
 import dev.rogerbertan.weatherfish.domain.Place
 import dev.rogerbertan.weatherfish.domain.WeatherError
 import dev.rogerbertan.weatherfish.domain.WeatherRepository
-import java.util.Locale
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,7 +26,7 @@ class XweatherWeatherRepository @Inject constructor(
 ) : WeatherRepository {
 
     override suspend fun currentWeather(point: GeoPoint): CurrentWeather =
-        fetch(AerisRequest(Endpoint(EndpointType.CONDITIONS), point.id), ::parseAerisConditions)
+        fetch(AerisRequest(Endpoint(EndpointType.CONDITIONS), point.xweatherId), ::parseAerisConditions)
 
     override suspend fun hourlyForecast(point: GeoPoint, hours: Int): List<HourlyForecast> =
         fetch(forecasts(point, filter = "1hr", limit = hours)) { parseAerisHourly(it, hours) }
@@ -35,7 +35,7 @@ class XweatherWeatherRepository @Inject constructor(
         fetch(forecasts(point, filter = "day", limit = days)) { parseAerisDaily(it, days) }
 
     override suspend fun searchPlaces(query: String): List<Place> {
-        val term = query.foldForSearch().filter { it.isLetterOrDigit() || it in " -'" }
+        val term = searchTerm(query)
         if (term.isBlank()) return emptyList()
         val params = ParameterBuilder()
             .withQuery("name:^$term")
@@ -46,15 +46,13 @@ class XweatherWeatherRepository @Inject constructor(
     }
 
     override suspend fun placeAt(point: GeoPoint): Place =
-        fetch(AerisRequest(Endpoint(EndpointType.PLACES), point.id)) {
+        fetch(AerisRequest(Endpoint(EndpointType.PLACES), point.xweatherId)) {
             parseAerisPlaces(it).firstOrNull() ?: throw WeatherError.NotFound
         }
 
-    private val GeoPoint.id get() = String.format(Locale.ROOT, "%.5f,%.5f", latitude, longitude)
-
     private fun forecasts(point: GeoPoint, filter: String, limit: Int) = AerisRequest(
         Endpoint(EndpointType.FORECASTS),
-        point.id,
+        point.xweatherId,
         *ParameterBuilder().withFilter(filter).withLimit(limit).build(),
     )
 

@@ -8,11 +8,12 @@ import dev.rogerbertan.weatherfish.domain.Place
 import dev.rogerbertan.weatherfish.domain.WeatherCondition
 import dev.rogerbertan.weatherfish.domain.WeatherError
 import java.text.Normalizer
-import java.time.DateTimeException
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneId
+import java.util.Locale
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
 
 val xweatherJson = Json { ignoreUnknownKeys = true }
 
@@ -28,19 +29,39 @@ fun weatherErrorFor(code: String?): WeatherError = when {
     else -> WeatherError.Unknown(code)
 }
 
-inline fun <T> parsingOrThrow(block: () -> T): T =
+fun xweatherErrorIn(json: String): WeatherError? =
     try {
-        block()
+        xweatherJson.decodeFromString<XweatherResponse<JsonElement>>(json).error?.code?.let(::weatherErrorFor)
     } catch (e: IllegalArgumentException) {
-        throw WeatherError.Unknown(e.message ?: "invalid response")
-    } catch (e: DateTimeException) {
-        throw WeatherError.Unknown(e.message ?: "invalid date")
-    } catch (e: NullPointerException) {
-        throw WeatherError.Unknown(e.message ?: "missing field")
+        null
     }
+
+val GeoPoint.xweatherId: String get() = String.format(Locale.ROOT, "%.5f,%.5f", latitude, longitude)
 
 fun String.foldForSearch(): String =
     Normalizer.normalize(trim().lowercase(), Normalizer.Form.NFD).replace(Regex("\\p{M}"), "")
+
+fun searchTerm(query: String): String =
+    query.foldForSearch().filter { it.isLetterOrDigit() || it in " -'" }
+
+fun parseConditions(json: String): CurrentWeather =
+    xweatherJson.decodeFromString<XweatherResponse<ConditionsResponse>>(json).orThrow()
+        .firstOrNull()?.periods?.firstOrNull()?.toDomain()
+        ?: throw WeatherError.NotFound
+
+fun parseHourly(json: String, hours: Int): List<HourlyForecast> =
+    xweatherJson.decodeFromString<XweatherResponse<ForecastResponse>>(json).orThrow()
+        .flatMap { it.periods }.take(hours).map { it.toHourly() }
+
+fun parseDaily(json: String, days: Int): List<DailyForecast> =
+    xweatherJson.decodeFromString<XweatherResponse<ForecastResponse>>(json).orThrow()
+        .flatMap { it.periods }.take(days).map { it.toDaily() }
+
+fun parsePlaces(json: String): List<Place> =
+    xweatherJson.decodeFromString<XweatherResponse<PlaceResponse>>(json).orThrow().map { it.toDomain() }
+
+fun parseClosestPlace(json: String): Place =
+    parsePlaces(json).firstOrNull() ?: throw WeatherError.NotFound
 
 fun PlaceResponse.toDomain() = Place(
     name = titleCasePlaceName(place.name),

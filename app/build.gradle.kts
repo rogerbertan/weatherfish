@@ -137,6 +137,7 @@ dependencies {
     implementation(libs.mapsgl)
     implementation(libs.mapbox.maps)
     implementation(libs.mapbox.maps.compose)
+    implementation(libs.ktor.client.okhttp)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation(libs.junit.jupiter.api)
@@ -146,6 +147,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.konsist)
     testImplementation(libs.mockk)
+    testImplementation(libs.ktor.client.mock)
     androidTestImplementation(platform(libs.junit.bom))
     androidTestImplementation(libs.junit.jupiter.api)
     debugImplementation(libs.androidx.compose.ui.tooling)

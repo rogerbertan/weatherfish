@@ -33,6 +33,8 @@ class ArchitectureTest {
             "com.google.gson",
             "com.google.android.gms",
             "androidx.datastore",
+            "io.ktor",
+            "okhttp3",
         )
 
         // Assert

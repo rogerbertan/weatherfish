@@ -2,10 +2,7 @@ package dev.rogerbertan.weatherfish.data.xweather
 
 import com.aerisweather.aeris.model.AerisDataJSON
 import dev.rogerbertan.weatherfish.data.fake.FakeEndpoint
-import dev.rogerbertan.weatherfish.data.fake.parseConditions
-import dev.rogerbertan.weatherfish.data.fake.parseDaily
-import dev.rogerbertan.weatherfish.data.fake.parseHourly
-import dev.rogerbertan.weatherfish.data.fake.parsePlaces
+import dev.rogerbertan.weatherfish.data.parsingOrThrow
 import dev.rogerbertan.weatherfish.domain.WeatherError
 import java.io.File
 import kotlinx.serialization.json.Json
@@ -69,7 +66,7 @@ class AerisMappingTest {
         val places = parseAerisPlaces(aerisData(json))
 
         // Assert
-        assertEquals(parsePlaces(json, query = ""), places)
+        assertEquals(parsePlaces(json), places)
     }
 
     @Test

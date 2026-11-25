@@ -1,5 +1,9 @@
 package dev.rogerbertan.weatherfish.data.fake
 
+import dev.rogerbertan.weatherfish.data.xweather.parseClosestPlace
+import dev.rogerbertan.weatherfish.data.xweather.parseConditions
+import dev.rogerbertan.weatherfish.data.xweather.parseDaily
+import dev.rogerbertan.weatherfish.data.xweather.parseHourly
 import dev.rogerbertan.weatherfish.domain.WeatherCondition
 import dev.rogerbertan.weatherfish.domain.WeatherError
 import java.io.File
@@ -57,7 +61,7 @@ class FakeJsonTest {
         val json = asset(FakeEndpoint.PlacesSearch)
 
         // Act
-        val places = parsePlaces(json, query = "SAO pau")
+        val places = matchingPlaces(json, query = "SAO pau")
 
         // Assert
         assertEquals(listOf("São Paulo"), places.map { it.name })

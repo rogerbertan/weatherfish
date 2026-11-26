@@ -38,8 +38,10 @@ fun xweatherErrorIn(json: String): WeatherError? =
 
 val GeoPoint.xweatherId: String get() = String.format(Locale.ROOT, "%.5f,%.5f", latitude, longitude)
 
+private val combiningMarks = Regex("\\p{M}")
+
 fun String.foldForSearch(): String =
-    Normalizer.normalize(trim().lowercase(), Normalizer.Form.NFD).replace(Regex("\\p{M}"), "")
+    Normalizer.normalize(trim().lowercase(), Normalizer.Form.NFD).replace(combiningMarks, "")
 
 fun searchTerm(query: String): String =
     query.foldForSearch().filter { it.isLetterOrDigit() || it in " -'" }

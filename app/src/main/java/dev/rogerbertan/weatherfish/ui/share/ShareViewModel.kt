@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -45,8 +46,11 @@ class ShareViewModel @Inject constructor(
 
     private val scanState = MutableStateFlow(ScanState())
 
-    val uiState: StateFlow<ShareUiState> = combine(activeLocation.place, scanState) { place, scan ->
-        val qr = SharedQr(place.name, DeepLinks.place(place.name, place.point))
+    private val sharedQr = activeLocation.place.map { place ->
+        SharedQr(place.name, DeepLinks.place(place.name, place.point))
+    }
+
+    val uiState: StateFlow<ShareUiState> = combine(sharedQr, scanState) { qr, scan ->
         ShareUiState(qr, scan.isScanning, scan.message, scan.scannedLink)
     }.stateIn(
         viewModelScope,

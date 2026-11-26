@@ -1,6 +1,6 @@
 # Antes e depois do Aeris Core
 
-Os números abaixo vêm do APK debug, do merged manifest e do `:app:dependencies --configuration debugRuntimeClasspath`. O "antes" é o commit `7be32b9`. O "depois" é o commit desta fase.
+Os dados apresentados a seguir foram extraídos do APK de debug, do Manifest mesclado e da configuração `:app:dependencies --configuration debugRuntimeClasspath`. Para comparação, o cenário anterior corresponde ao commit `7be32b9`, enquanto o cenário atual representa o commit desta etapa.
 
 ## APK debug
 

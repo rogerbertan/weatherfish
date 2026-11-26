@@ -9,7 +9,7 @@ Os dados apresentados a seguir foram extraídos do APK de debug, do Manifest mes
 | Tamanho | 63.750.741 B | 65.376.210 B | +1.625.469 B, ou +2,5% |
 | Arquivos | 177 | 290 | +113 |
 
-Os 113 arquivos novos são os recursos do AAR: 112 drawables de ícones de clima, um `menu` e um `values`. Juntos somam cerca de 0,9 MB. O resto do aumento vem do `classes.jar` do SDK, com 250 KB, e da Gson. Com resource shrinking, o APK release ficou com 3,5 MB.
+Os 113 novos arquivos correspondem aos recursos incluídos no AAR: 112 drawables de ícones meteorológicos, um arquivo `menu` e um `values`, totalizando aproximadamente 0,9 MB. O restante do aumento de tamanho está relacionado ao `classes.jar` do SDK, com 250 KB, e à Gson. Após aplicar o resource shrinking, o APK de release ficou com 3,5 MB.
 
 ## Merged manifest
 

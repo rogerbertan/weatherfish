@@ -10,6 +10,7 @@ import java.util.Locale
 import kotlin.math.roundToInt
 
 private val hourFormatter = DateTimeFormatter.ofPattern("HH'h'")
+private val dayMonthFormatter = DateTimeFormatter.ofPattern("dd/MM")
 
 fun formatTemperature(celsius: Double, unit: TemperatureUnit): String {
     val value = when (unit) {
@@ -24,4 +25,4 @@ fun formatHour(time: Instant, zone: ZoneId): String = hourFormatter.format(time.
 fun formatWeekday(date: LocalDate, locale: Locale = Locale.getDefault()): String =
     date.dayOfWeek.getDisplayName(TextStyle.FULL, locale).replaceFirstChar { it.titlecase(locale) }
 
-fun formatDayMonth(date: LocalDate): String = "%02d/%02d".format(date.dayOfMonth, date.monthValue)
+fun formatDayMonth(date: LocalDate): String = dayMonthFormatter.format(date)

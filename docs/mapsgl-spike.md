@@ -8,7 +8,7 @@ O POM do MapsGL 1.8.0 no JitPack não declara o Mapbox. O SDK compila contra ele
 
 ## Criar o controller no `DisposableMapEffect`
 
-O app cria o controller no `DisposableMapEffect` do `MapboxMap`, e o spike passou sem o fallback para `AndroidView`. O efeito roda quando a `MapView` já existe. O `subscribeMapLoaded` só dispara depois do layout e do estilo, e o app adiciona as camadas nesse callback.
+O controller é criado pelo app dentro do `DisposableMapEffect` do `MapboxMap`, e o teste de viabilidade funcionou sem precisar recorrer ao `AndroidView`. Esse efeito é executado quando a `MapView` já está disponível. Já o `subscribeMapLoaded` aguarda a conclusão do layout e o carregamento do estilo para, então, permitir que o app adicione as camadas do mapa.
 
 ```kotlin
 DisposableMapEffect(credentials) { mapView ->

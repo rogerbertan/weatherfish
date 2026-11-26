@@ -11,6 +11,8 @@ import java.time.ZoneId
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.json.encodeToStream
 
 @Serializable
 data class StoredSettings(
@@ -54,12 +56,12 @@ object SettingsSerializer : Serializer<StoredSettings> {
 
     override suspend fun readFrom(input: InputStream): StoredSettings =
         try {
-            settingsJson.decodeFromString(StoredSettings.serializer(), input.readBytes().decodeToString())
+            settingsJson.decodeFromStream(StoredSettings.serializer(), input)
         } catch (e: SerializationException) {
             throw CorruptionException("Unable to read settings", e)
         }
 
     override suspend fun writeTo(t: StoredSettings, output: OutputStream) {
-        output.write(settingsJson.encodeToString(StoredSettings.serializer(), t).encodeToByteArray())
+        settingsJson.encodeToStream(StoredSettings.serializer(), t, output)
     }
 }

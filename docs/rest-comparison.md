@@ -69,7 +69,7 @@ Com o Ktor e o OkHttp, o cancelamento da coroutine cancela o `Call` do OkHttp, q
 
 No app, a diferença só aparece na busca:
 - **Clima.** O `CachingWeatherRepository` roda as condições e as previsões num `async` do `@ApplicationScope`, e quem chama só espera o resultado. Cancelar a tela cancela a espera, mas não o request, que termina e fica no cache. Isso vale para os quatro adapters.
-- **Busca.** A busca e o `placeAt` não passam pelo cache. O `mapLatest` do `SearchViewModel` cancela a busca anterior quando o termo muda. Com o Ktor, o request anterior é cancelado de verdade. Com o SDK, ele continua até o fim numa thread do `Dispatchers.IO`, e o resultado é descartado.
+- **Busca.** A busca e o `placeAt` não passam pelo cache. O `mapLatest` do `SearchViewModel` cancela a busca anterior quando o termo muda. Com o Ktor, o request anterior é cancelado de verdade. Com o SDK, ele continua até o fim numa thread do `Dispatchers.IO`, mas a resposta não é aproveitada.
 
 ## Open-Meteo
 

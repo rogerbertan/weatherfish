@@ -27,11 +27,12 @@ class CameraScanViewModel @Inject constructor() : ViewModel() {
 
     fun onCodesDetected(codes: List<String>) {
         if (!_uiState.value.isAnalyzing) return
-        val code = codes.firstOrNull(PlaceQrCodec::isPlaceLink) ?: codes.firstOrNull()
+        val placeLink = codes.firstOrNull(PlaceQrCodec::isPlaceLink)
+        val code = placeLink ?: codes.firstOrNull()
         streak = if (code != null && code == candidate) streak + 1 else 1
         candidate = code
         if (code == null || streak != CONFIRMATION_FRAMES) return
-        if (PlaceQrCodec.isPlaceLink(code)) {
+        if (placeLink != null) {
             _uiState.value = CameraScanUiState(isAnalyzing = false, scannedLink = code)
         } else {
             _uiState.update { it.copy(message = ShareMessage.InvalidCode) }

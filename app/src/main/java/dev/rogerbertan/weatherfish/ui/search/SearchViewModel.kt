@@ -46,8 +46,9 @@ class SearchViewModel @Inject constructor(
 
     val uiState: StateFlow<LoadState<List<SearchResult>>> =
         combine(results, preferences.favorites) { results, favorites ->
+            val favoritePoints = favorites.mapTo(HashSet()) { it.point }
             results.map { places ->
-                places.map { place -> SearchResult(place, isFavorite = favorites.any { it.point == place.point }) }
+                places.map { place -> SearchResult(place, isFavorite = place.point in favoritePoints) }
             }
         }.stateIn(viewModelScope, SharingStarted.Eagerly, LoadState.Loaded(emptyList()))
 

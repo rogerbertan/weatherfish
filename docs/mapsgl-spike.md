@@ -42,7 +42,7 @@ perform a map operation on a worker thread.
     at A.i.invokeSuspend(SourceFile:747)
 ```
 
-O carregamento de tiles do MapsGL roda em `Dispatchers.Default` e chama `MapboxMap.executeOnRenderThread` dessa mesma thread. O `ThreadChecker` do Mapbox só lança a exceção quando duas condições valem: a meta-data `com.mapbox.maps.ThreadChecker` não está em `false` e o `BuildConfig.DEBUG` do app é verdadeiro. No release, ele retorna sem checar nada. O `AndroidManifest.xml` declara a meta-data com `false`, o que deixa o debug igual ao release. O Mapbox ainda registra `CameraManager::getCameraState called from a thread that is not owning the object` no logcat. O defeito é do MapsGL e vale reportar no repositório do SDK.
+O MapsGL apresenta indícios de um problema de gerenciamento de threads durante o carregamento de tiles em Dispatchers.Default. Embora o ThreadChecker esteja desabilitado no AndroidManifest.xml, o Mapbox continua registrando acessos à thread incorreta em CameraManager.getCameraState(), indicando que a desativação apenas oculta a validação, sem corrigir a possível falha. Recomenda-se investigar a sincronização entre threads e reportar o problema no repositório oficial do SDK.
 
 ## Recursos depois de sair da tela
 

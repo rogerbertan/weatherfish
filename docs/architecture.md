@@ -18,7 +18,7 @@ flowchart LR
 - `ui` tem um pacote por tela e depende só de `domain`.
 - `di` liga cada interface à implementação.
 
-O repositório devolve os dados direto e lança uma `WeatherError` quando falha, como um service do Spring. O projeto não usa tipos de resultado como `Result`. A UI captura a `WeatherError` só no helper `loadState`. A tela então mostra a mensagem de erro e um botão para tentar de novo.
+O repositório devolve os dados direto e lança uma `WeatherError` quando falha, como um service do Spring. O projeto não usa tipos de resultado como `Result`. A UI captura a `WeatherError` só no helper `loadState`. Em seguida, a interface exibe o aviso de erro junto à opção de realizar uma nova tentativa.
 
 ## Uma única cidade ativa para todas as telas
 

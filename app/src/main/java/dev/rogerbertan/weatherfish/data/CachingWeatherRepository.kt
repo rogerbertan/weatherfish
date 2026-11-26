@@ -47,8 +47,10 @@ class CachingWeatherRepository(
     @Suppress("UNCHECKED_CAST")
     private suspend fun <T : Any> cached(key: Key, ttl: Duration, load: suspend () -> T): T {
         val entry = mutex.withLock {
-            entries[key]?.takeIf { it.expiresAt.hasNotPassedNow() }
-                ?: Entry(scope.async { load() }, timeSource.markNow() + ttl).also { entries[key] = it }
+            entries[key]?.takeIf { it.expiresAt.hasNotPassedNow() } ?: run {
+                entries.values.removeAll { it.expiresAt.hasPassedNow() }
+                Entry(scope.async { load() }, timeSource.markNow() + ttl).also { entries[key] = it }
+            }
         }
         return try {
             entry.result.await() as T

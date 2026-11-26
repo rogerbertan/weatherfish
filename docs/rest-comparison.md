@@ -39,7 +39,7 @@ O release cresce quase tanto quanto o debug porque o `packageScope` do R8 só ot
 +     androidx.startup:startup-runtime:1.1.1 -> 1.2.0
 ```
 
-O `com.mapbox.common` já trazia o OkHttp 4.10. O Ktor sobe esse OkHttp para a 5.5.1, que vira a versão do Mapbox também. Com a 5.5.1, os tiles do mapa base continuam carregando no emulador. O `slf4j-api` vem sem implementação, então o SLF4J só escreve um aviso no stderr e não loga nada.
+O `com.mapbox.common` já utilizava o OkHttp 4.10, mas a inclusão do Ktor atualiza essa dependência para a versão 5.5.1, que passa a ser compartilhada pelo Mapbox. Mesmo com essa alteração, os tiles do mapa base continuam carregando normalmente no emulador. Já o `slf4j-api` é incluído sem uma implementação associada, fazendo com que o SLF4J exiba apenas um aviso no stderr, sem gerar logs.
 
 ## Erros e headers
 

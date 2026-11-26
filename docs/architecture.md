@@ -117,4 +117,4 @@ Os JSONs de `app/src/main/assets/fake/` imitam as respostas da Xweather, com um 
 
 ## Os testes rodam na JVM
 
-Os testes unitários usam JUnit 5 e MockK e rodam sem emulador. Eles cobrem os ViewModels, o mapeamento das respostas da API, o cache, a cidade ativa e a leitura do DataStore. O `ArchitectureTest` usa Konsist para checar os imports entre as camadas.
+A suíte de testes unitários utiliza JUnit 5 e MockK, permitindo executar os testes sem precisar de um emulador. A cobertura inclui os ViewModels, o processamento das respostas da API, o funcionamento do cache, o gerenciamento da cidade ativa e a leitura do DataStore. Além disso, o ArchitectureTest utiliza Konsist para validar as dependências e os imports entre as diferentes camadas da aplicação.

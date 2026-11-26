@@ -14,10 +14,12 @@ class AndroidReverseGeocoder @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : ReverseGeocoder {
 
+    private val geocoder by lazy { Geocoder(context, LOCALE) }
+
     override suspend fun nameAt(point: GeoPoint): GeocodedName? {
         if (!Geocoder.isPresent()) return null
         val address = suspendCancellableCoroutine<Address?> { continuation ->
-            Geocoder(context, LOCALE).getFromLocation(
+            geocoder.getFromLocation(
                 point.latitude,
                 point.longitude,
                 1,

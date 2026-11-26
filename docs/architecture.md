@@ -57,7 +57,7 @@ A Hoje e os Detalhes pedem a condição atual da mesma cidade. Quando os dois pe
 
 O DataStore guarda as favoritas, a última cidade e a unidade de temperatura no arquivo `settings.json`. O projeto usa o DataStore tipado porque as favoritas são uma lista de cidades, e o DataStore de chave e valor não guarda listas de objetos.
 
-A API devolve a temperatura em Celsius, e a UI converte para Fahrenheit ao formatar. Trocar a unidade não faz request novo.
+A API fornece os valores de temperatura em Celsius, enquanto a conversão para Fahrenheit acontece diretamente na interface durante a formatação. Dessa forma, alterar a unidade de temperatura não exige uma nova requisição à API.
 
 ## Uma cidade passa de um aparelho para outro por QR
 

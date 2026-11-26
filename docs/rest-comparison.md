@@ -73,7 +73,7 @@ No app, a diferença só aparece na busca:
 
 ## Open-Meteo
 
-- Não tem chave. O uso gratuito, não comercial, tem limite de 10.000 chamadas por dia, e a cota estourada vira 429.
+- Não é necessário utilizar uma chave de API. O plano gratuito para uso não comercial permite até 10.000 requisições por dia. Ao ultrapassar esse limite, a API retorna o erro 429.
 - A busca usa o `geocoding-api.open-meteo.com` com `language=pt`. Os nomes chegam com acento, como `São Paulo`, e o termo não precisa do `foldForSearch`.
 - Não tem geocodificação reversa. O `placeAt` pega o nome, a região e o país do `Geocoder` do Android, em pt-BR, e o fuso de um forecast sem variáveis. Quando o `Geocoder` não responde, o `placeAt` lança `NotFound`, e a cidade ativa continua a anterior. No emulador, a localização do aparelho volta como "Cocal do Sul".
 - O `dailyForecast` usa o `timeformat` padrão, que devolve a data local como `2026-11-24`. O `currentWeather` e o `hourlyForecast` usam `unixtime`.

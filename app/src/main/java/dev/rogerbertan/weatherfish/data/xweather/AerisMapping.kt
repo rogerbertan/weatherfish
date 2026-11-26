@@ -25,10 +25,10 @@ fun parseAerisConditions(data: List<AerisDataJSON>): CurrentWeather =
         ?: throw WeatherError.NotFound
 
 fun parseAerisHourly(data: List<AerisDataJSON>, hours: Int): List<HourlyForecast> =
-    data.flatMap { AerisForecastsResponse(it).periods }.take(hours).map { it.toHourly() }
+    data.asSequence().flatMap { AerisForecastsResponse(it).periods }.take(hours).map { it.toHourly() }.toList()
 
 fun parseAerisDaily(data: List<AerisDataJSON>, days: Int): List<DailyForecast> =
-    data.flatMap { AerisForecastsResponse(it).periods }.take(days).map { it.toDaily() }
+    data.asSequence().flatMap { AerisForecastsResponse(it).periods }.take(days).map { it.toDaily() }.toList()
 
 fun parseAerisPlaces(data: List<AerisDataJSON>): List<Place> =
     data.map { AerisPlacesResponse(it).toDomain() }

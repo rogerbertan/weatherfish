@@ -30,10 +30,15 @@ fun QrCode(content: String, contentDescription: String, modifier: Modifier = Mod
                 val module = size.width / matrix.width
                 val path = Path()
                 for (y in 0 until matrix.height) {
-                    for (x in 0 until matrix.width) {
-                        if (matrix[x, y]) {
-                            path.addRect(Rect(x * module, y * module, (x + 1) * module, (y + 1) * module))
+                    var x = 0
+                    while (x < matrix.width) {
+                        if (!matrix[x, y]) {
+                            x++
+                            continue
                         }
+                        val start = x
+                        while (x < matrix.width && matrix[x, y]) x++
+                        path.addRect(Rect(start * module, y * module, x * module, (y + 1) * module))
                     }
                 }
                 onDrawBehind { drawPath(path, Color.Black) }
